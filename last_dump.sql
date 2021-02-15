@@ -26,10 +26,10 @@ DROP TABLE IF EXISTS `test`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `test` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `num` int NOT NULL,
-  `str` varchar(45) NOT NULL,
+  `num` int DEFAULT NULL,
+  `str` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `test` (
 
 LOCK TABLES `test` WRITE;
 /*!40000 ALTER TABLE `test` DISABLE KEYS */;
-INSERT INTO `test` VALUES (2,9999,'CIAOCIAOCIAO'),(3,33,'d'),(4,33,'33');
+INSERT INTO `test` VALUES (2,9999,'CIAOCIAOCIAO'),(3,33,'d'),(4,33,'33'),(5,33,'2');
 /*!40000 ALTER TABLE `test` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-02-15 17:05:30
+-- Dump completed on 2021-02-15 17:19:23
