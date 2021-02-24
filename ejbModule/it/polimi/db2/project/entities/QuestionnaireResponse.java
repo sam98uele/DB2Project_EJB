@@ -9,7 +9,6 @@ import javax.persistence.*;
  * 
  * Entity class for the table "questionnaire_response". the questionnaire_response need to be intended as the response of the user 
  * to the whole questionnaire relative to a specific product.
- * @author lucaa
  *
  */
 @Entity
@@ -72,7 +71,7 @@ public class QuestionnaireResponse implements Serializable{
 	 * not be interested immediately to the actual answers, the fetch type is lazy. If we remove the questionnaire, answers 
 	 * need to be removed.
 	 */
-	@OneToMany(mappedBy = "questionnaire", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "questionnaireResponse", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<StatisticalAnswer> statisticalAnswers;
 	
 	/**
@@ -81,7 +80,7 @@ public class QuestionnaireResponse implements Serializable{
 	 * entity representing the marketing_answer table, this is NOT THE OWNER of the relationship. Since we may not be interested 
 	 * immediately to the actual answers, the fetch type is lazy. If we remove the questionnaire, answers need to be removed.
 	 */
-	@OneToMany(mappedBy = "questionnaire", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "questionnaireResponse", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<MarketingAnswer> marketingAnswers;
 	
 	/**

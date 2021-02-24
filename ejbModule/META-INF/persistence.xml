@@ -6,7 +6,14 @@
 	<persistence-unit name="DB2Project_EJB">
 		<jta-data-source>DB2Project</jta-data-source>
 		<class>it.polimi.db2.project.entities.Test</class>
-
+   		<class>it.polimi.db2.project.entities.MarketingAnswer</class>
+    	<class>it.polimi.db2.project.entities.Product</class>
+    	<class>it.polimi.db2.project.entities.Log</class>
+    	<class>it.polimi.db2.project.entities.MarketingQuestion</class>
+    	<class>it.polimi.db2.project.entities.Offensive</class>
+    	<class>it.polimi.db2.project.entities.QuestionnaireResponse</class>
+    	<class>it.polimi.db2.project.entities.StatisticalAnswer</class>
+    	<class>it.polimi.db2.project.entities.User</class>
 		<properties>
 			<property name="eclipselink.logging.level" value="FINE" />
 		</properties>
