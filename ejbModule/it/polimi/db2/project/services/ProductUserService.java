@@ -2,13 +2,19 @@ package it.polimi.db2.project.services;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.LockTimeoutException;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
+import javax.persistence.PersistenceException;
+import javax.persistence.PessimisticLockException;
+import javax.persistence.QueryTimeoutException;
+import javax.persistence.TransactionRequiredException;
 
 import it.polimi.db2.project.entities.Product;
 import it.polimi.db2.project.exceptions.NoProductOfTheDayException;
@@ -32,15 +38,22 @@ public class ProductUserService {
 		// today's date
 		Date date = Calendar.getInstance().getTime();
 		
-		Product prodDay;
+		List<Product> prodList = null;
 		
 		try {
-			prodDay = em.createNamedQuery("Product.getProductOfTheDay", Product.class).setParameter("date", date)
-					.getSingleResult();
+			prodList = em.createNamedQuery("Product.getProductOfTheDay", Product.class).setParameter("date", date)
+					.getResultList();
 		}
-		catch(NoResultException | NonUniqueResultException e) {
+		catch(IllegalStateException | PersistenceException e) {
+			e.printStackTrace(); // TODO: develop only
 			throw new NoProductOfTheDayException();
 		}
+		
+		// if the product is not 1, then it means we do not have a product of the day to display
+		if(prodList == null || prodList.isEmpty() || prodList.size() != 1)
+			throw new NoProductOfTheDayException("The number of product of that day is not 1");
+		
+		Product prodDay = prodList.get(0);
 		
 		// TODO: ALSO NEED ALL THE CHILDREN OF THEM!
 		// to fetch the collection (needed by the web tier)

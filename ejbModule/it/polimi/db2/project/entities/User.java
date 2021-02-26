@@ -30,6 +30,12 @@ public class User implements Serializable{
 	private int id;
 	
 	/**
+	 * points gained by the user. Admin will have default points
+	 */
+	@Column(nullable = false)
+	private int points;
+	
+	/**
 	 * Username of the user. Annotation needed to specify the varchar property of the DB. Unique = true has effect only during the DDL generation, not at runtime.
 	 * At runtime the unique check is performed in the database. We left it only for completeness
 	 */
