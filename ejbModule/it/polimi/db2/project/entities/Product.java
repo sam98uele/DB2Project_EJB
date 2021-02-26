@@ -12,13 +12,10 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "product", schema = "db2_project")
-/**
- * 
- * @NamedQueries TODO
- *
- */
+@NamedQueries({ 
+	@NamedQuery(name = "Product.getProductOfTheDay", query = "SELECT p FROM Product p where p.date = :date")
+})
 public class Product implements Serializable{
-
 	/**
 	 * Default serial version ID
 	 */
@@ -68,6 +65,7 @@ public class Product implements Serializable{
 	 * also to remove all the related answers. Since we may not be immediately interested in the related answer, we can use LAZY 
 	 * fetch type.
 	 */
+	// TODO: IT IS NOT NEEDED
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<StatisticalAnswer> statisticalAnswers;
 
@@ -90,6 +88,30 @@ public class Product implements Serializable{
 	 */
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<MarketingQuestion> marketingQuestions;
+	
+	// ---- CONSTRUCTORS
+	
+	/**
+	 * Default Constructor
+	 */
+	public Product() {
+	
+	}
+	
+	/**
+	 * Constructor for the Entity
+	 * @param name
+	 * @param date
+	 * @param image
+	 * @param description
+	 */
+	public Product(String name, Date date, byte[] image, String description) {
+		this.name = name;
+		this.date = date;
+		this.image = image;
+		this.description = description;
+	}
+	
 	
 	//----GETTERS AND SETTERS----
 
@@ -255,7 +277,11 @@ public class Product implements Serializable{
 	 * Method used to add a marketing question
 	 */
 	public void addMarketingQuestion(MarketingQuestion marketingQuestion) {
+		// adding the marketing question
 		getMarketingQuestions().add(marketingQuestion);
+		
+		// setting the product equal to this one to the marketing question
+		marketingQuestion.setProduct(this);
 	}
 	
 	/**

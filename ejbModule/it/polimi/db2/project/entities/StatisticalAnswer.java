@@ -66,6 +66,7 @@ public class StatisticalAnswer implements Serializable{
 	 * Many statistical answers belongs to one single product. This is a Many to One relationship, and since the table represented 
 	 * by this entity is the one that contains the FK(foreign key), this table is the OWNER of the relationship.
 	 */
+	// TODO: IT IS NOT NEEDED
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;

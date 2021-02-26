@@ -37,8 +37,13 @@ public class User implements Serializable{
 	
 	/**
 	 * Password of the user. Annotation needed to specify the varchar property of the DB
+	 * We do not really need the password available, and also we set it to null before send it 
+	 * to the Web component to not expose the password. 
+	 * (Setting it to null is needed because we are not sure it will be 
+	 * fetched lazily, because it is a hint for the Persistence Provider, it is not mandatory)
 	 */
 	@Column(columnDefinition = "varchar(45)", nullable = false)
+	@Basic(fetch = FetchType.LAZY)
 	private String password;
 	
 	/**

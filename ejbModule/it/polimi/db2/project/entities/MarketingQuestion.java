@@ -58,6 +58,18 @@ public class MarketingQuestion implements Serializable{
 	@JoinColumn(name = "product_id")
 	private Product product;
 	
+	//--- CONSTRUCTORS ----
+	
+	/**
+	 * Default constructor
+	 */
+	public MarketingQuestion() {	
+	}
+	
+	public MarketingQuestion(String question) {
+		this.question = question;
+	}
+	
 	//----GETTERS AND SETTERS----
 
 	/**

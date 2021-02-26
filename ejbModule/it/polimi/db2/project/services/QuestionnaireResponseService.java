@@ -9,6 +9,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 
+import it.polimi.db2.project.entities.MarketingAnswer;
+import it.polimi.db2.project.entities.MarketingQuestion;
+import it.polimi.db2.project.entities.Product;
+import it.polimi.db2.project.entities.QuestionnaireResponse;
+import it.polimi.db2.project.entities.StatisticalAnswer;
 import it.polimi.db2.project.exceptions.ResponseException;
 
 /**
@@ -72,7 +77,7 @@ public class QuestionnaireResponseService {
 	 * 
 	 * @param marketingAnswers the answers of the previous section to temporarily save
 	 */
-	public void goToStatisticalSection(List<MarketingAnswers> marketingAnswers) {
+	public void goToStatisticalSection(List<MarketingAnswer> marketingAnswers) {
 		this.section = 1;
 		// TODO: is is ok performed with this action?
 		this.marketingAnswer = marketingAnswers;

@@ -1,6 +1,7 @@
 package it.polimi.db2.project.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.*;
 
@@ -47,6 +48,24 @@ public class Log implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
+	
+	//---- CONSTRUCTOR ----
+	/**
+	 * Default constructor
+	 */
+	public Log() {
+	}
+	
+	/**
+	 * Constructor 
+	 * 
+	 * @param dateTime the timestamp of the log
+	 * @param user the user who logged in
+	 */
+	public Log(Date dateTime, User user) {
+		this.datetime = dateTime;
+		this.user = user;
+	}
 	
 	//----GETTERS AND SETTERS----
 	

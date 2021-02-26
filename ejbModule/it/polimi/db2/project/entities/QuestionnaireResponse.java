@@ -24,6 +24,7 @@ public class QuestionnaireResponse implements Serializable{
 	 * Default serialVersionUID
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	//----ATTRIBUTES----
 	
 	/**
