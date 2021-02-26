@@ -62,7 +62,7 @@ public class QuestionnaireResponse implements Serializable{
 	 * represented by this entity, this entity is the OWNER of the relationship.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 	
 	/**
@@ -90,7 +90,7 @@ public class QuestionnaireResponse implements Serializable{
 	 * foreign key is in the table represented by this entity, this entity is the OWNER of the relationship.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "product_id")
+	@JoinColumn(name = "product_id", nullable = false)
 	private Product product;
 	
 	//----GETTERS AND SETTERS----

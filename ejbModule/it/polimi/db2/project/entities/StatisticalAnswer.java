@@ -33,21 +33,18 @@ public class StatisticalAnswer implements Serializable{
 	private int id;
 	
 	/**
-	 * Recorded response to question 1
+	 * Recorded response to question 1. can be nullable if optional
 	 */
-	@Column(nullable = false)
 	private int q1;
 	
 	/**
 	 * Recorded response to question 2
 	 */
-	@Column(nullable = false)
 	private int q2;
 	
 	/**
 	 * Recorded response to question 3
 	 */
-	@Column(nullable = false)
 	private int q3;
 	
 	//----RELATIONS----
@@ -58,18 +55,8 @@ public class StatisticalAnswer implements Serializable{
 	 * represented by this entity is the one that contains the FK (foreign key), this table is the OWNER of the relationship.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "response_id")
+	@JoinColumn(name = "response_id", nullable = false)
 	private QuestionnaireResponse questionnaireResponse;
-	
-	/**
-	 * Relationship with table "product"
-	 * Many statistical answers belongs to one single product. This is a Many to One relationship, and since the table represented 
-	 * by this entity is the one that contains the FK(foreign key), this table is the OWNER of the relationship.
-	 */
-	// TODO: IT IS NOT NEEDED
-	@ManyToOne
-	@JoinColumn(name = "product_id")
-	private Product product;
 	
 	//----GETTERS AND SETTERS----
 	
@@ -151,21 +138,5 @@ public class StatisticalAnswer implements Serializable{
 	 */
 	public void setQuestionnaireResponse(QuestionnaireResponse questionnaireResponse) {
 		this.questionnaireResponse = questionnaireResponse;
-	}
-
-	/**
-	 * Getter method used to retrieve the product these statistical answers are about
-	 * @return
-	 */
-	public Product getProduct() {
-		return product;
-	}
-
-	/**
-	 * Setter method used to set the product these statistical answers are about
-	 * @param product
-	 */
-	public void setProduct(Product product) {
-		this.product = product;
 	}
 }

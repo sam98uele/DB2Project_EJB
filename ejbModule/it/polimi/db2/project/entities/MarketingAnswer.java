@@ -46,7 +46,7 @@ public class MarketingAnswer implements Serializable{
 	 * represented by this entity contains the FK (foreign key), this entity is the OWNER of the relationship.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "response_id")
+	@JoinColumn(name = "response_id", nullable = false)
 	private QuestionnaireResponse questionnaireResponse;
 	
 	/**
@@ -56,7 +56,7 @@ public class MarketingAnswer implements Serializable{
 	 * owner of the relationship.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "question_id")
+	@JoinColumn(name = "question_id", nullable = false)
 	private MarketingQuestion questionAsked;
 	
 	//----GETTERS AND SETTERS----

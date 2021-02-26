@@ -30,9 +30,10 @@ public class User implements Serializable{
 	private int id;
 	
 	/**
-	 * Username of the user. Annotation needed to specify the varchar property of the DB
+	 * Username of the user. Annotation needed to specify the varchar property of the DB. Unique = true has effect only during the DDL generation, not at runtime.
+	 * At runtime the unique check is performed in the database. We left it only for completeness
 	 */
-	@Column(columnDefinition = "varchar(45)", nullable = false)
+	@Column(columnDefinition = "varchar(45)", nullable = false, unique = true)
 	private String username;
 	
 	/**

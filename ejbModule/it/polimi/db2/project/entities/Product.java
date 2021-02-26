@@ -48,26 +48,16 @@ public class Product implements Serializable{
 	 */
 	@Basic(fetch=FetchType.LAZY)
 	@Lob
+	@Column(nullable = false)
 	private byte[] image;
 	
 	/**
 	 * Description of the product
 	 */
-	@Column(columnDefinition = "varchar(200)", nullable = false)
+	@Column(columnDefinition = "varchar(200)")
 	private String description;
 	
 	//----RELATIONS----
-	
-	/**
-	 * Relationship with table "statistical_answer"
-	 * One product has many (3) statistical answers. This is a One to Many relationship. Since the table represented by this entity 
-	 * does not contain the FK (foreign key), this entity is NOT THE OWNER of the relationship. Once a product is removed, we want 
-	 * also to remove all the related answers. Since we may not be immediately interested in the related answer, we can use LAZY 
-	 * fetch type.
-	 */
-	// TODO: IT IS NOT NEEDED
-	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
-	private List<StatisticalAnswer> statisticalAnswers;
 
 	/**
 	 * Relationship with table "questionnaire_response"
@@ -193,22 +183,6 @@ public class Product implements Serializable{
 	 */
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	/**
-	 * Getter method to retrieve the list of statistical answers
-	 * @return
-	 */
-	public List<StatisticalAnswer> getStatisticalAnswers() {
-		return statisticalAnswers;
-	}
-
-	/**
-	 * Setter method to set the list of statistical answers
-	 * @param statisticalAnswers
-	 */
-	public void setStatisticalAnswers(List<StatisticalAnswer> statisticalAnswers) {
-		this.statisticalAnswers = statisticalAnswers;
 	}
 
 	/**

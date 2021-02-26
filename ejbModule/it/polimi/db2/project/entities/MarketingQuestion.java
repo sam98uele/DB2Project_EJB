@@ -55,7 +55,7 @@ public class MarketingQuestion implements Serializable{
 	 * the table represented by this entity contains the FK (foreign key), this entity IS THE OWNER of the relationship.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "product_id")
+	@JoinColumn(name = "product_id", nullable = false)
 	private Product product;
 	
 	//--- CONSTRUCTORS ----
