@@ -220,20 +220,6 @@ public class Product implements Serializable{
 	//----ADDERS - REMOVERS----
 	
 	/**
-	 * Method used to add a statistical answer to the list of statistical answers related to this product
-	 */
-	public void addStatisticalAnswer(StatisticalAnswer statisticalAnswer) {
-		getStatisticalAnswers().add(statisticalAnswer);
-	}
-	
-	/**
-	 * Method used to remove a statistical answer to the list of statistical answers related to this product
-	 */
-	public void removeStatisticalAnswer(StatisticalAnswer statisticalAnswer) {
-		getStatisticalAnswers().remove(statisticalAnswer);
-	}
-	
-	/**
 	 * Method used to add a questionnaire response to this product
 	 */
 	public void addQuestionnaireResponse(QuestionnaireResponse questionnaireResponse) {
