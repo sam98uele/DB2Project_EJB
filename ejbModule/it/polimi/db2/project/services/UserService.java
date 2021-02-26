@@ -1,9 +1,15 @@
 package it.polimi.db2.project.services;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 
+import it.polimi.db2.project.entities.User;
+import it.polimi.db2.project.exceptions.ApplicationErrorException;
 import it.polimi.db2.project.exceptions.CredentialsException;
 
 /**
@@ -48,9 +54,33 @@ public class UserService {
 	 * @param password the password of the user who wants to login the system
 	 * @return the user object
 	 * @throws CredentialsException if the sent credentials where not correct
+	 * @throws ApplicationErrorException if there is a problem not related to the user during the login phase
 	 */
-	public User chackCredentialts(String username, String password) throws CredentialsException{
-		// TODO: To implement
+	public User chackCredentialts(String username, String password) throws CredentialsException, ApplicationErrorException{
+		List<User> uList = null;
+		try {
+			// getting username linked to the username or password
+			uList = em.createNamedQuery("User.checkCredentials", User.class)
+					.setParameter(1, username).setParameter(2, password)
+					.getResultList();
+		} catch (PersistenceException e) {
+			// if there are problems during the execution of the query,
+			// it is not user fault, so throw an exception
+			throw new ApplicationErrorException("Error while checking your credentials! Try again Later.");
+		}
+		
+		// if no user are returned by the query, it means no users exists associated to the
+		//	sent data.
+		if (uList.isEmpty())
+			throw new CredentialsException("Error! Username of Password is wrong!");
+		else if (uList.size() == 1)
+			return uList.get(0); // there exists one user associated to the data
+		
+		// if more users are present, then it's a problem.
+		// cannot allow the login, but it is an application problem!
+		// it should be avoided during registration phase!
+		// and also usernames should be unique!
+		throw new CredentialsException("Error! Username of Password is wrong!");
 	}
 	
 }
