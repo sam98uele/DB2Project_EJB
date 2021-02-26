@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 
 import it.polimi.db2.project.entities.MarketingQuestion;
 import it.polimi.db2.project.entities.Product;
@@ -22,7 +23,7 @@ public class ProductAdminService {
 	/**
 	 * JPA Entity Manager
 	 */
-	@PersistenceContext(unitName = "DB2Project_EJB")
+	@PersistenceContext(unitName = "DB2Project_EJB", type = PersistenceContextType.EXTENDED)
 	private EntityManager em;
 	
 	/*
@@ -96,5 +97,10 @@ public class ProductAdminService {
 	public void saveProduct() {
 		// persisting the product with all the marketing questions cascading!
 		em.persist(product);
+		//TODO: check if product is not null before persist
+	}
+	
+	public Product getProduct() {
+		return this.product;
 	}
 }

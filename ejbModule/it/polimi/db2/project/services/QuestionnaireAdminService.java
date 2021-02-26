@@ -2,6 +2,7 @@ package it.polimi.db2.project.services;
 
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -13,12 +14,13 @@ import it.polimi.db2.project.entities.User;
  * @author Samuele
  *
  */
+@Stateless
 public class QuestionnaireAdminService {
 	/**
 	 * JPA Entity Manager
 	 * it is extended in order to let it live until the user calls the "remove" method.
 	 */
-	@PersistenceContext(unitName = "DB2Project_EJB", type = PersistenceContextType.EXTENDED)
+	@PersistenceContext(unitName = "DB2Project_EJB")
 	private EntityManager em;
 	
 	/**

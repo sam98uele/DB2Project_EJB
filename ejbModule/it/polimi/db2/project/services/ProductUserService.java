@@ -19,7 +19,7 @@ public class ProductUserService {
 	 * JPA Entity Manager
 	 * it is extended in order to let it live until the user calls the "remove" method.
 	 */
-	@PersistenceContext(unitName = "DB2Project_EJB", type = PersistenceContextType.EXTENDED)
+	@PersistenceContext(unitName = "DB2Project_EJB")
 	private EntityManager em;
 	
 	/**
