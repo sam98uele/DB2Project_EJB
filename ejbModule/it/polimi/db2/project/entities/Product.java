@@ -166,7 +166,7 @@ public class Product implements Serializable{
 	 * Get the base64 of the image
 	 * @return
 	 */
-	public String getThumbData() {
+	public String getImageData() {
 		return Base64.getMimeEncoder().encodeToString(image);
 	}
 
