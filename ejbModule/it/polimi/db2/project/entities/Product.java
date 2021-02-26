@@ -3,6 +3,7 @@ package it.polimi.db2.project.entities;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Base64;
 
 import javax.persistence.*;
 /**
@@ -159,6 +160,14 @@ public class Product implements Serializable{
 	 */
 	public byte[] getImage() {
 		return image;
+	}
+	
+	/**
+	 * Get the base64 of the image
+	 * @return
+	 */
+	public String getThumbData() {
+		return Base64.getMimeEncoder().encodeToString(image);
 	}
 
 	/**
