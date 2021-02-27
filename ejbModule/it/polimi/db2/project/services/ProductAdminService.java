@@ -1,12 +1,18 @@
 package it.polimi.db2.project.services;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.ejb.Remove;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
+import javax.persistence.TemporalType;
+
+import org.joda.time.DateTimeComparator;
 
 import it.polimi.db2.project.entities.MarketingQuestion;
 import it.polimi.db2.project.entities.Product;
@@ -49,16 +55,31 @@ public class ProductAdminService {
 	 * @throws PermissionDeniedException if user performing the action is not allowed to do so
 	 */
 	public Product addProduct(String name, byte[] img,  Date date, String description) throws ProductException, InvalidInputArgumentException, PermissionDeniedException{
+		// today's date
+		Date todayDate = Calendar.getInstance().getTime();
+		
+		// lets compare the two dates, to see if the inserted one is before today
+		int dateCompRes = DateTimeComparator.getDateOnlyInstance().compare(date, todayDate);
+		// if it is before, it's illegal, so throw an exception
+		if(dateCompRes < 0)
+			throw new InvalidInputArgumentException("The inserted date is before the current date! You can insert only product in a date equalt to today or a future date!");
+		
+		// TODO: THE DATE DOES NOT WORK PROPERLY
+		java.sql.Date dateSQL = new java.sql.Date(date.getTime());
+		
 		// getting the product of the day of the day specified for that product
-		List<Product> prodDay = em.createNamedQuery("Product.getProductOfTheDay", Product.class).setParameter("date", date)
+		List<Product> prodDay = em.createNamedQuery("Product.getProductOfTheDay", Product.class)
+				.setParameter("date", dateSQL)
 				.getResultList();
 		
 		// if there are products of the day available, then it's not possible to add a new one for that day!
 		if(prodDay.size() != 0)
 			throw new ProductException("In the specified day there already exists a product! Cannot insert an other one!");
 		
+		//Date dateAA = Calendar.getInstance().getTime();
+		
 		// creating the new product
-		Product product = new Product(name, date, img, description);
+		Product product = new Product(name, dateSQL, img, description);
 		
 		this.product = product;
 
@@ -91,6 +112,23 @@ public class ProductAdminService {
 	}
 	
 	/**
+	 * This method will remove the specified marketing question from the product marketing questions
+	 * (note: if it does not exist it will do nothing!)
+	 *  
+	 * @param marketingQuestionId the Id of the marketing question to remove
+	 * @return the updated product
+	 */
+	public Product deleteMarketingQuestion(Integer marketingQuestionId) {
+		// removing the marketing question (if it exists)	
+		this.product.getMarketingQuestions()
+			.removeIf(item -> item.getId() == marketingQuestionId);
+		
+		// returning the update product
+		return this.product;
+		
+	}
+	
+	/**
 	 * This is used to save the product
 	 * 	once created and added all the needed marketing questions
 	 */
@@ -99,8 +137,19 @@ public class ProductAdminService {
 		em.persist(product);
 		//TODO: check if product is not null before persist
 	}
-	
+
+	/**
+	 * @return the product
+	 */
 	public Product getProduct() {
 		return this.product;
+	}
+	
+	/**
+	 * This will destroy the stateful EJB
+	 */
+	@Remove
+	public void remove() {
+		this.product = null;
 	}
 }
