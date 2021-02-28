@@ -14,6 +14,7 @@ import javax.persistence.PersistenceContextType;
 import javax.persistence.PersistenceException;
 import javax.persistence.PessimisticLockException;
 import javax.persistence.QueryTimeoutException;
+import javax.persistence.TemporalType;
 import javax.persistence.TransactionRequiredException;
 
 import it.polimi.db2.project.entities.Product;
@@ -36,12 +37,15 @@ public class ProductUserService {
 	 */
 	public Product getProductOfTheDay() throws NoProductOfTheDayException {
 		// today's date
-		Date date = Calendar.getInstance().getTime();
+		//Date date = Calendar.getInstance().getTime();
+		//java.sql.Date dateSQL = new java.sql.Date(date.getTime());
 		
+		// date.toString();
 		List<Product> prodList = null;
 		
 		try {
-			prodList = em.createNamedQuery("Product.getProductOfTheDay", Product.class).setParameter("date", date)
+			prodList = em.createNamedQuery("Product.getProductOfTheDayToday", Product.class)
+					//.setParameter("date", dateSQL)
 					.getResultList();
 		}
 		catch(IllegalStateException | PersistenceException e) {

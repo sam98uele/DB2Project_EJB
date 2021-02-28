@@ -2,6 +2,7 @@ package it.polimi.db2.project.entities;
 
 import java.io.Serializable;
 import java.util.*;
+import java.sql.Date;
 
 import javax.persistence.*;
 
@@ -14,7 +15,8 @@ import org.eclipse.persistence.indirection.IndirectList;
 @Entity
 @Table(name = "product", schema = "db2_project")
 @NamedQueries({ 
-	@NamedQuery(name = "Product.getProductOfTheDay", query = "SELECT p FROM Product p where p.date = :date")
+	@NamedQuery(name = "Product.getProductOfTheDay", query = "SELECT p FROM Product p WHERE p.date = :date"),
+	@NamedQuery(name = "Product.getProductOfTheDayToday", query = "SELECT p FROM Product p WHERE p.date = CURRENT_DATE")
 })
 public class Product implements Serializable{
 	/**
@@ -40,7 +42,7 @@ public class Product implements Serializable{
 	/**
 	 * Date in which this product will be the product of the day
 	 */
-	@Temporal(TemporalType.DATE)
+	//@Temporal(TemporalType.DATE)
 	@Column(nullable = false)
 	private Date date;
 	
