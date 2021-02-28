@@ -102,6 +102,7 @@ public class Product implements Serializable{
 		this.image = image;
 		this.description = description;
 		this.marketingQuestions = new IndirectList<MarketingQuestion>();
+		this.questionnaireResponses = new IndirectList<QuestionnaireResponse>();
 	}
 	
 	
