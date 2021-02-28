@@ -1,11 +1,11 @@
 package it.polimi.db2.project.entities;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.Base64;
+import java.util.*;
 
 import javax.persistence.*;
+
+import org.eclipse.persistence.indirection.IndirectList;
 /**
  * 
  * Entity class representing table "product"
@@ -101,6 +101,7 @@ public class Product implements Serializable{
 		this.date = date;
 		this.image = image;
 		this.description = description;
+		this.marketingQuestions = new IndirectList<MarketingQuestion>();
 	}
 	
 	
