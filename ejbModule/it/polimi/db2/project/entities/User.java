@@ -93,6 +93,27 @@ public class User implements Serializable{
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<QuestionnaireResponse> questionnaireResponses;
 	
+	//--- CONSTRUCTORS ----
+	/**
+	 * Default Constructor
+	 */
+	public User() {
+	}
+	
+	/**
+	 * Constructor for Normal Users
+	 * 
+	 * @param username the username of the user
+	 * @param password the password of the user
+	 */
+	public User(String username, String password) {
+		this.username = username;
+		this.password = password;
+		this.isAdmin = false; // this constructor will create normal users
+		this.blocked = false; // by default the user is not blocked
+	}
+	
+	
 	//----GETTERS AND SETTERS----
 	/**
 	 * these are all the getters and setters method for this class

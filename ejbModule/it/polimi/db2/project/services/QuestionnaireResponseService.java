@@ -173,13 +173,13 @@ public class QuestionnaireResponseService {
 		
 		// checking if already answered
 		List<QuestionnaireResponse> responses= em.createQuery(
-				"SELECT r FROM Product p JOIN QuestionnaireResponse r WHERE p.id = ?1 AND r.user.id = ?2", 
+				"SELECT r FROM Product p JOIN p.questionnaireResponses r WHERE p.id = ?1 AND r.user.id = ?2", 
 				QuestionnaireResponse.class)
 				.setParameter(1, this.product.getId())
 				.setParameter(2, user.getId())
 				.getResultList();
 		
-		if(responses == null || responses.isEmpty() || responses.size() != 0)
+		if(responses != null && !responses.isEmpty() && responses.size() != 0)
 			throw new InvalidActionException("You cannot submit the questionnaire two times! Wait next day!");
 		
 		// loading the marketing questions, fetched lazily

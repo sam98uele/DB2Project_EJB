@@ -17,6 +17,7 @@ import it.polimi.db2.project.exceptions.ApplicationErrorException;
 import it.polimi.db2.project.exceptions.CredentialsException;
 import it.polimi.db2.project.exceptions.InvalidActionException;
 import it.polimi.db2.project.exceptions.NoProductOfTheDayException;
+import it.polimi.db2.project.exceptions.RegistrationException;
 
 /**
  * This is the service class for the user.
@@ -101,6 +102,39 @@ public class UserService {
 	}
 	
 	/**
+	 * This method is used to perform a registration of a user
+	 * (admins are not created or assigned with the application)
+	 * @param username the username of the user
+	 * @param password the password of the user
+	 * @return the newly created user
+	 * @throws RegistrationException if there are problems with the registration
+	 */
+	public User registration(String username, String password) throws RegistrationException {
+		// checking if the username is available
+		List<User> users_same_username = em.createQuery(
+				"SELECT r FROM User r WHERE r.username = ?1", 
+				User.class)
+				.setParameter(1, username)
+				.getResultList();
+		
+		if(users_same_username != null && users_same_username.isEmpty() && users_same_username.size() != 0)
+			throw new RegistrationException("The Username is not available");
+			
+		// if all ok, creating the user
+		// and persist it
+		User user = new User(username, password);
+		try {
+			em.persist(user);
+		}
+		catch(PersistenceException e) {
+			throw new RegistrationException("Your Registration cannot be completed.");
+		}
+		
+		// if all ok, returning the newly created user
+		return user;
+	}
+	
+	/**
 	 * It is used to know if the user has already submitted the product of the day
 	 * for this month or not.
 	 * @param user the user we want to know
@@ -120,16 +154,28 @@ public class UserService {
 		
 		// checking if already answered
 		List<QuestionnaireResponse> responses= em.createQuery(
-				"SELECT r FROM Product p JOIN QuestionnaireResponse r WHERE p.id = ?1 AND r.user.id = ?2", 
+				"SELECT r FROM Product p JOIN p.questionnaireResponses r WHERE p.id = ?1 AND r.user.id = ?2", 
 				QuestionnaireResponse.class)
 				.setParameter(1, product.getId())
 				.setParameter(2, user.getId())
 				.getResultList();
 		
-		if(responses.size() != 0)
-			return false;
+		if(responses != null && !responses.isEmpty() && responses.size() != 0)
+			return true;
 		
 		return false;
 	}
 	
+	/**
+	 * This will return the leaderboard
+	 * @return the leaderboard
+	 */
+	public List<User> getLeaderboard() {
+		List<User> l_users = em.createQuery(
+				"SELECT u FROM User u WHERE u.isAdmin != true ORDER BY u.scores", 
+				User.class)
+				.getResultList();
+		
+		return l_users;
+	}
 }
