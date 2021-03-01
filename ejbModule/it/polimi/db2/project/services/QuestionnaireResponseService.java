@@ -206,6 +206,21 @@ public class QuestionnaireResponseService {
 	}
 	
 	/**
+	 * @return the response given the id
+	 * @param id is the id of the index of the response to return
+	 */
+	public String getResponseMarketingById(int id) {
+		return this.response.getMarketingAnswers().get(id).getAnswer();
+	}
+	
+	/**
+	 * @return the statistical responses
+	 */
+	public StatisticalAnswer getResponseStat() {
+		return this.response.getStatisticalAnswers();
+	}
+	
+	/**
 	 * @return the product of the day this answer corresponds
 	 */
 	public Product getProduct() {
