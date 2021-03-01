@@ -160,12 +160,16 @@ public class QuestionnaireResponseService {
 	 * @throws InvalidActionException 
 	 */
 	public Product startQuestionnaire(User user) throws NoProductOfTheDayException, InvalidActionException {
-		this.product = (Product) em.createNamedQuery("Product.getProductOfTheDayToday", Product.class)
+		// retrieving the product of the day
+		List<Product> retrieved_products = em.createNamedQuery("Product.getProductOfTheDayToday", Product.class)
 				.getResultList();
 		
 		// if no product of the day, cannot continue!
-		if (this.product == null) 
-				throw new NoProductOfTheDayException();
+		if (retrieved_products == null || retrieved_products.isEmpty() || retrieved_products.size() != 1) 
+			throw new NoProductOfTheDayException();
+		
+		// else getting the product of the day
+		this.product = retrieved_products.get(0);
 		
 		// checking if already answered
 		List<QuestionnaireResponse> responses= em.createQuery(
@@ -175,7 +179,7 @@ public class QuestionnaireResponseService {
 				.setParameter(2, user.getId())
 				.getResultList();
 		
-		if(responses.size() != 0)
+		if(responses == null || responses.isEmpty() || responses.size() != 0)
 			throw new InvalidActionException("You cannot submit the questionnaire two times! Wait next day!");
 		
 		// loading the marketing questions, fetched lazily

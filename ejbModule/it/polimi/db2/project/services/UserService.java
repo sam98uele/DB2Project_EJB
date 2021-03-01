@@ -10,9 +10,13 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 
 import it.polimi.db2.project.entities.Log;
+import it.polimi.db2.project.entities.Product;
+import it.polimi.db2.project.entities.QuestionnaireResponse;
 import it.polimi.db2.project.entities.User;
 import it.polimi.db2.project.exceptions.ApplicationErrorException;
 import it.polimi.db2.project.exceptions.CredentialsException;
+import it.polimi.db2.project.exceptions.InvalidActionException;
+import it.polimi.db2.project.exceptions.NoProductOfTheDayException;
 
 /**
  * This is the service class for the user.
@@ -94,6 +98,38 @@ public class UserService {
 		// it should be avoided during registration phase!
 		// and also usernames should be unique!
 		throw new CredentialsException("Error! Username of Password is wrong!");
+	}
+	
+	/**
+	 * It is used to know if the user has already submitted the product of the day
+	 * for this month or not.
+	 * @param user the user we want to know
+	 * @return true if already sumbitted, false otherwise
+	 */
+	public boolean answeredToQuestionnaireOfTheDay(User user) {
+		// getting the product of the day
+		List<Product> retrieved_products = em.createNamedQuery("Product.getProductOfTheDayToday", Product.class)
+				.getResultList();
+		
+		// if no product of the day, cannot continue!
+		if (retrieved_products == null || retrieved_products.isEmpty() || retrieved_products.size() != 1) 
+				return false;
+		
+		// this is the product of the day
+		Product product = retrieved_products.get(0);
+		
+		// checking if already answered
+		List<QuestionnaireResponse> responses= em.createQuery(
+				"SELECT r FROM Product p JOIN QuestionnaireResponse r WHERE p.id = ?1 AND r.user.id = ?2", 
+				QuestionnaireResponse.class)
+				.setParameter(1, product.getId())
+				.setParameter(2, user.getId())
+				.getResultList();
+		
+		if(responses.size() != 0)
+			return false;
+		
+		return false;
 	}
 	
 }
