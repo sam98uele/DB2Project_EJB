@@ -1,9 +1,8 @@
 package it.polimi.db2.project.entities;
 
 import java.io.Serializable;
+import java.util.*;
 import java.sql.Date;
-import java.util.List;
-import java.util.Base64;
 
 import javax.persistence.*;
 

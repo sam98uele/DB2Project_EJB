@@ -125,8 +125,7 @@ public class ProductAdminService {
 	 */
 	public Product deleteMarketingQuestion(Integer marketingQuestionId) {
 		// removing the marketing question (if it exists)	
-		this.product.getMarketingQuestions()
-			.removeIf(item -> item.getId() == marketingQuestionId);
+		this.product.getMarketingQuestions().remove(marketingQuestionId.intValue());
 		
 		// returning the update product
 		return this.product;
@@ -140,7 +139,11 @@ public class ProductAdminService {
 	public void saveProduct() {
 		// persisting the product with all the marketing questions cascading!
 		em.persist(product);
-		//TODO: check if product is not null before persist
+		
+		//Remove the product once persisted
+		this.product = null;
+		
+		//TODO: check if product is not null before persist send an exception
 	}
 
 	/**
@@ -148,6 +151,10 @@ public class ProductAdminService {
 	 */
 	public Product getProduct() {
 		return this.product;
+	}
+	
+	public void undoCreation() {
+		this.product = null;
 	}
 	
 	/**
