@@ -57,7 +57,7 @@ public class MarketingAnswer implements Serializable{
 	 */
 	@ManyToOne
 	@JoinColumn(name = "question_id", nullable = false)
-	private MarketingQuestion questionAsked;
+	private MarketingQuestion question;
 	
 	//----GETTERS AND SETTERS----
 	
@@ -113,16 +113,16 @@ public class MarketingAnswer implements Serializable{
 	 * Getter method to retrieve the question to which this answer is relative
 	 * @return
 	 */
-	public MarketingQuestion getQuestionAsked() {
-		return questionAsked;
+	public MarketingQuestion getQuestion() {
+		return question;
 	}
 
 	/**
 	 * Setter method to set the question to which this answer is relative
 	 * @param question
 	 */
-	public void setQuestionAsked(MarketingQuestion questionAsked) {
-		this.questionAsked = questionAsked;
+	public void setQuestion(MarketingQuestion question) {
+		this.question = question;
 	}
 
 }

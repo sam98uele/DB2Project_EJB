@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import org.eclipse.persistence.indirection.IndirectList;
+
 /**
  * 
  * Entity class for the table "questionnaire_response". the questionnaire_response need to be intended as the response of the user 
@@ -72,8 +74,8 @@ public class QuestionnaireResponse implements Serializable{
 	 * not be interested immediately to the actual answers, the fetch type is lazy. If we remove the questionnaire, answers 
 	 * need to be removed.
 	 */
-	@OneToMany(mappedBy = "questionnaireResponse", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
-	private List<StatisticalAnswer> statisticalAnswers;
+	@OneToOne(mappedBy = "questionnaireResponse", orphanRemoval = true, cascade = CascadeType.ALL)
+	private StatisticalAnswer statisticalAnswers;
 	
 	/**
 	 * Relationship with table "marketing_answer"
@@ -92,6 +94,12 @@ public class QuestionnaireResponse implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "product_id", nullable = false)
 	private Product product;
+	
+	//--- CONSTRUCTOR ----
+	public QuestionnaireResponse() {
+		this.marketingAnswers = new IndirectList<>();
+	}
+	
 	
 	//----GETTERS AND SETTERS----
 	
@@ -176,7 +184,7 @@ public class QuestionnaireResponse implements Serializable{
 	 * product.
 	 * @return
 	 */
-	public List<StatisticalAnswer> getStatisticalAnswers() {
+	public StatisticalAnswer getStatisticalAnswers() {
 		return statisticalAnswers;
 	}
 
@@ -185,7 +193,7 @@ public class QuestionnaireResponse implements Serializable{
 	 * product.
 	 * @param statisticalAnswers
 	 */
-	public void setStatisticalAnswers(List<StatisticalAnswer> statisticalAnswers) {
+	public void setStatisticalAnswers(StatisticalAnswer statisticalAnswers) {
 		this.statisticalAnswers = statisticalAnswers;
 	}
 
@@ -223,24 +231,7 @@ public class QuestionnaireResponse implements Serializable{
 		this.product = product;
 	}
 	
-	//---- ADDERS - REMOVERS----
-	
-	/**
-	 * Method used to add a statistical answer response to the list of statistical answer responses
-	 * @param statisticalAnswer
-	 */
-	public void addStatisticalAnswer(StatisticalAnswer statisticalAnswer) {
-		getStatisticalAnswers().add(statisticalAnswer);
-	}
-	
-	/**
-	 * Method used to remove a statistical answer response to the list of statistical answer responses
-	 * @param statisticalAnser
-	 */
-	public void removeStatisticalAnswer(StatisticalAnswer statisticalAnswer) {
-		getStatisticalAnswers().remove(statisticalAnswer);
-	}
-	
+	//---- ADDERS - REMOVERS----	
 	/**
 	 * Method used to add a marketing answer response to the list of marketing answer responses
 	 * @param marketingAnswer

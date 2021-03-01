@@ -47,7 +47,7 @@ public class MarketingQuestion implements Serializable{
 	 * is NOT THE OWNER of the relationship. Since we may not be immediately interested in the answer, we can use a Fetch type 
 	 * lazy, and if we remove question, we want also to remove all the correlated answers.
 	 */
-	@OneToMany(mappedBy = "questionAsked", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "question", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<MarketingAnswer> marketingAnswers;
 	
 	/**

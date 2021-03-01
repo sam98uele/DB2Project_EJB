@@ -16,6 +16,7 @@ import org.joda.time.DateTimeComparator;
 
 import it.polimi.db2.project.entities.MarketingQuestion;
 import it.polimi.db2.project.entities.Product;
+import it.polimi.db2.project.exceptions.InvalidActionException;
 import it.polimi.db2.project.exceptions.InvalidInputArgumentException;
 import it.polimi.db2.project.exceptions.PermissionDeniedException;
 import it.polimi.db2.project.exceptions.ProductException;
@@ -98,8 +99,12 @@ public class ProductAdminService {
 	 * 
 	 * @param question the text of the question
 	 * @return the product with the newly inserted marketing question
+	 * @throws InvalidActionException if a marketing question is created before the product
 	 */
-	public Product addMarketingQuestion(String question) {
+	public Product addMarketingQuestion(String question) throws InvalidActionException {
+		if(this.product == null) {
+			throw new InvalidActionException("You cannot insert a marketing question before create a product!");
+		}
 		// creating the new question
 		MarketingQuestion marketingQuestion = new MarketingQuestion(question);
 		

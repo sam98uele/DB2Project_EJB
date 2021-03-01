@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Base64;
 
 import javax.persistence.*;
+
+import org.eclipse.persistence.indirection.IndirectList;
 /**
  * 
  * Entity class representing table "product"
@@ -102,6 +104,7 @@ public class Product implements Serializable{
 		this.date = date;
 		this.image = image;
 		this.description = description;
+		this.marketingQuestions = new IndirectList<>();
 	}
 	
 	
@@ -234,6 +237,7 @@ public class Product implements Serializable{
 	 */
 	public void addQuestionnaireResponse(QuestionnaireResponse questionnaireResponse) {
 		getQuestionnaireResponses().add(questionnaireResponse);
+		questionnaireResponse.setProduct(this);
 	}
 	
 	/**
