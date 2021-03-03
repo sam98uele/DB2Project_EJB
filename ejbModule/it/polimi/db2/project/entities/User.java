@@ -224,6 +224,21 @@ public class User implements Serializable{
 	}
 	
 	/**
+	 * @return the points of the user
+	 */
+	public int getPoints() {
+		return this.points;
+	}
+	
+	/**
+	 * To set the points to the user
+	 * @param points the points to set
+	 */
+	public void setPoints(int points) {
+		this.points = points;
+	}
+	
+	/**
 	 * Getter method for the list of questionnaire to which the user responded
 	 * @return
 	 */

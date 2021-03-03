@@ -167,12 +167,17 @@ public class UserService {
 	}
 	
 	/**
-	 * This will return the leaderboard
+	 * This is used to return the leaderboard of the user who has submitted the questionnaire of the day
+	 * only the users who have submitted successfully it!
+	 * 
 	 * @return the leaderboard
 	 */
 	public List<User> getLeaderboard() {
+		// TODO: completed if removed need to be removed also in this query
 		List<User> l_users = em.createQuery(
-				"SELECT u FROM User u WHERE u.isAdmin != true ORDER BY u.scores", 
+				"SELECT u FROM User u WHERE u.isAdmin != true"
+				+ " AND u in (SELECT r.user FROM Product p JOIN p.questionnaireResponses r WHERE p.date = CURRENT_DATE AND r.completed = true AND r.submitted=true)"
+				+ " ORDER BY u.points DESC", 
 				User.class)
 				.getResultList();
 		

@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContextType;
 
 import it.polimi.db2.project.entities.MarketingAnswer;
 import it.polimi.db2.project.entities.MarketingQuestion;
+import it.polimi.db2.project.entities.Offensive;
 import it.polimi.db2.project.entities.Product;
 import it.polimi.db2.project.entities.QuestionnaireResponse;
 import it.polimi.db2.project.entities.StatisticalAnswer;
@@ -40,7 +41,7 @@ public class QuestionnaireResponseService {
 	/**
 	 * The Id of the user who is compiling the questionnaire
 	 */
-	Integer userId;
+	User user;
 	
 	/**
 	 * This is the response created by the user
@@ -94,6 +95,24 @@ public class QuestionnaireResponseService {
 	}
 	
 	/**
+	 * This method will check if in the submitted questionnaire there are some bad works
+	 * @return true if there are bad words, false otherwise
+	 */
+	private boolean badWords() {
+		// TODO: to implement the remove of ? and ! etc to keep only words and not symbols
+		for (MarketingAnswer marketingAnswer : this.response.getMarketingAnswers()) {
+			String[] words = marketingAnswer.getAnswer().split(" ");
+			for(String word: words) {
+				List<Offensive> offensive = em.createNamedQuery("Offensive.searchBadWord", Offensive.class)
+						.setParameter(1, word).getResultList();
+				if(offensive.size() != 0)
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
 	 * To submit the compiled questionnaire
 	 * note:
 	 * 		the submit button is in the "statistical" section, so, 
@@ -111,6 +130,13 @@ public class QuestionnaireResponseService {
 				|| this.response.getMarketingAnswers().size() == 0)
 			throw new InvalidAnswerException("Marketing Answers are mandatory!");
 		
+		// if the user has inserted a bad word
+		if(this.badWords()) {
+			this.user.setBlocked(true); // block the user
+			em.merge(this.user); // update the user
+			throw new ResponseException("You have inserted a bad word! You are blocked! You cannot fill any questionnaire anymore!");
+		}
+			
 		// checking if the marketing questions are all answered
 		for (MarketingQuestion marketingQuestion : this.product.getMarketingQuestions()) {
 			// TODO: FIX THE LAMBDA
@@ -203,6 +229,8 @@ public class QuestionnaireResponseService {
 		this.product.getMarketingQuestions().size();
 			
 		this.response.setUser(user);
+		
+		this.user = user;
 		
 		// returning the product
 		return this.product;

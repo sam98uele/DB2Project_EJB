@@ -10,9 +10,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "offensive", schema="db2_project")
-/**
- * @NamedQueries TODO
- */
+@NamedQuery(name = "Offensive.searchBadWord", query = "SELECT r FROM Offensive r  WHERE r.word = ?1")
 public class Offensive implements Serializable{
 	
 	//----ATTRIBUTES----
