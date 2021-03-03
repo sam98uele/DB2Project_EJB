@@ -33,19 +33,19 @@ public class StatisticalAnswer implements Serializable{
 	private int id;
 	
 	/**
-	 * Recorded response to question 1. can be nullable if optional
+	 * Age
 	 */
-	private int q1;
+	private Integer q1;
 	
 	/**
-	 * Recorded response to question 2
+	 * 
 	 */
-	private int q2;
+	private Integer q2;
 	
 	/**
 	 * Recorded response to question 3
 	 */
-	private int q3;
+	private Integer q3;
 	
 	//----RELATIONS----
 	
@@ -57,6 +57,11 @@ public class StatisticalAnswer implements Serializable{
 	@OneToOne
 	@JoinColumn(name = "response_id", nullable = false)
 	private QuestionnaireResponse questionnaireResponse;
+	
+	//----CONSTRUCTOOR----
+	public StatisticalAnswer() {
+
+	}
 	
 	//----GETTERS AND SETTERS----
 	
@@ -80,8 +85,8 @@ public class StatisticalAnswer implements Serializable{
 	 * Getter method to retrieve the answer to the first question of the statistical answer related to a product done by a user
 	 * @return
 	 */
-	public int getQ1() {
-		return q1;
+	public Integer getQ1() {
+		return this.q1;
 	}
 
 	/**
@@ -96,8 +101,8 @@ public class StatisticalAnswer implements Serializable{
 	 * Getter method to retrieve the answer to the second question of the statistical answer related to a product done by a user
 	 * @return
 	 */
-	public int getQ2() {
-		return q2;
+	public Integer getQ2() {
+		return this.q2;
 	}
 
 	/**
@@ -112,8 +117,8 @@ public class StatisticalAnswer implements Serializable{
 	 * Getter method to retrieve the answer to the third question of the statistical answer related to a product done by a user
 	 * @return
 	 */
-	public int getQ3() {
-		return q3;
+	public Integer getQ3() {
+		return this.q2;
 	}
 
 	/**

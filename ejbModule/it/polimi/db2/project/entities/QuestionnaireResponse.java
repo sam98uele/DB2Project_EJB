@@ -98,6 +98,7 @@ public class QuestionnaireResponse implements Serializable{
 	//--- CONSTRUCTOR ----
 	public QuestionnaireResponse() {
 		this.marketingAnswers = new IndirectList<>();
+		this.statisticalAnswers = new StatisticalAnswer();
 	}
 	
 	
@@ -246,5 +247,17 @@ public class QuestionnaireResponse implements Serializable{
 	 */
 	public void removeMarketingAnswers(MarketingAnswer marketingAnswer) {
 		getMarketingAnswers().remove(marketingAnswer);
+	}
+	
+	/**
+	 * @return the response given the id
+	 * @param id is the id of the index of the response to return
+	 */
+	public String getResponseMarketingById(int id) {
+		if(id < getMarketingAnswers().size()) {
+			return getMarketingAnswers().get(id).getAnswer();
+		}else {
+			return "";
+		}
 	}
 }
