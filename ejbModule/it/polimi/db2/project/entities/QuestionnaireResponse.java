@@ -46,16 +46,6 @@ public class QuestionnaireResponse implements Serializable{
 	@Column(nullable = false)
 	private boolean submitted;
 	
-	/**
-	 * eventually we will need a tag Type(type = "org.hibernate.type.NumericBooleanType") in order to map a boolean to a TINYINT, 
-	 * because without the tag the boolean could be mapped to a bit value, and not to a TINYINT
-	 * Flag needed to remember if the questionnaire has been completed or not yet.
-	 * "0" means that the user is still compiling the questionnaire, and the questionnaire is not complete;
-	 * "1" means that the questionnaire has been completed.
-	 */
-	@Column(nullable = false)
-	private boolean completed;
-	
 	//----RELATIONS----
 	
 	/**
@@ -141,28 +131,6 @@ public class QuestionnaireResponse implements Serializable{
 	 */
 	public void setSubmitted(boolean submitted) {
 		this.submitted = submitted;
-	}
-
-	/**
-	 * Getter method for the flag "completed".
-	 * Remember that:
-	 * "0" means that the user is still compiling the questionnaire, and the questionnaire is not complete;
-	 * "1" means that the questionnaire has been completed.
-	 * @return
-	 */
-	public boolean isCompleted() {
-		return completed;
-	}
-	
-	/**
-	 * Setter method for the flag "completed".
-	 * Remember that:
-	 * "0" means that the user is still compiling the questionnaire, and the questionnaire is not complete;
-	 * "1" means that the questionnaire has been completed.
-	 * @param completed
-	 */
-	public void setCompleted(boolean completed) {
-		this.completed = completed;
 	}
 	
 	/**
