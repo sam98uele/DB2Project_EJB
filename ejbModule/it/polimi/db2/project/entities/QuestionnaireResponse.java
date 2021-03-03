@@ -83,7 +83,8 @@ public class QuestionnaireResponse implements Serializable{
 	 * entity representing the marketing_answer table, this is NOT THE OWNER of the relationship. Since we may not be interested 
 	 * immediately to the actual answers, the fetch type is lazy. If we remove the questionnaire, answers need to be removed.
 	 */
-	@OneToMany(mappedBy = "questionnaireResponse", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+	// fetch = FetchType.LAZY
+	@OneToMany(mappedBy = "questionnaireResponse", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<MarketingAnswer> marketingAnswers;
 	
 	/**

@@ -78,6 +78,8 @@ public class QuestionnaireResponseService {
 	public void goToStatisticalSection(List<MarketingAnswer> marketingAnswers) {
 		this.section = 1;
 		this.response.setMarketingAnswers(marketingAnswers);
+		for(int i = 0; i<marketingAnswers.size(); i++)
+			marketingAnswers.get(i).setQuestionnaireResponse(this.response);
 	}
 	
 	/**
@@ -88,6 +90,7 @@ public class QuestionnaireResponseService {
 	public void goToMarketingSection(StatisticalAnswer statisticalAnswer) {
 		this.section = 0;
 		this.response.setStatisticalAnswers(statisticalAnswer);
+		statisticalAnswer.setQuestionnaireResponse(this.response);
 	}
 	
 	/**
@@ -102,6 +105,7 @@ public class QuestionnaireResponseService {
 	 */
 	public void submit(StatisticalAnswer statisticalAnswer) throws ResponseException, InvalidAnswerException{
 		this.response.setStatisticalAnswers(statisticalAnswer);
+		statisticalAnswer.setQuestionnaireResponse(this.response);
 		
 		if(this.response.getMarketingAnswers() == null || this.response.getMarketingAnswers().isEmpty() 
 				|| this.response.getMarketingAnswers().size() == 0)
@@ -109,11 +113,20 @@ public class QuestionnaireResponseService {
 		
 		// checking if the marketing questions are all answered
 		for (MarketingQuestion marketingQuestion : this.product.getMarketingQuestions()) {
-			int size = this.response.getMarketingAnswers().stream()
-					.filter(a -> a.getQuestion().getId() == marketingQuestion.getId())
-					.collect(Collectors.toList()).size();
+			// TODO: FIX THE LAMBDA
+			//			TEMPORARILY I'VE PUTTED THE DOUBLE FOR CYCLE
+			//List<MarketingAnswer> m_a_r = this.response.getMarketingAnswers().stream()
+			//		.filter(a -> a.getQuestion().getId() == marketingQuestion.getId())
+			//		.collect(Collectors.toList());
+			//int size = m_a_r.size();
 			
-			if(size != 1)
+			int i = 0;
+			for(MarketingAnswer marketingAnswer : this.response.getMarketingAnswers()) {
+				if(marketingAnswer.getQuestion().getId() == marketingQuestion.getId())
+						i++;
+			}
+			
+			if(i != 1)
 				throw new InvalidAnswerException("The Marketing Answare are mandatory! You must submit all of them!");
 		}
 		
@@ -126,6 +139,8 @@ public class QuestionnaireResponseService {
 		this.product.addQuestionnaireResponse(this.response);
 		
 		em.persist(this.response); //TODO: check if this could be avoided due to cascading!	
+		
+		this.response = null;
 	}
 	
 	/**
@@ -149,6 +164,8 @@ public class QuestionnaireResponseService {
 		
 		// persisting the response
 		em.persist(this.response);
+		
+		this.response = null;
 	}
 	
 	/**
