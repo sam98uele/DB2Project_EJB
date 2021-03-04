@@ -51,8 +51,9 @@ public class StatisticalAnswer implements Serializable{
 	
 	/**
 	 * Relationship with table "questionnaire_response"
-	 * Many statistical answer belongs to a single questionnaire response. This is a Many to one relationship, and since  the table 
-	 * represented by this entity is the one that contains the FK (foreign key), this table is the OWNER of the relationship.
+	 * Many statistical answer, which are represented by only one entity belongs to a single questionnaire response. This is a 
+	 * One to one relationship, and since the table represented by this entity is the one that contains the FK (foreign key), 
+	 * this table is the OWNER of the relationship.
 	 */
 	@OneToOne
 	@JoinColumn(name = "response_id", nullable = false)
