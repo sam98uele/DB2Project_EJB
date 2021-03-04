@@ -10,6 +10,7 @@ import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
+import javax.persistence.PersistenceException;
 import javax.persistence.TemporalType;
 
 import org.joda.time.DateTimeComparator;
@@ -135,15 +136,30 @@ public class ProductAdminService {
 	/**
 	 * This is used to save the product
 	 * 	once created and added all the needed marketing questions
+	 * @throws ProductException if the product is not complete
 	 */
-	public void saveProduct() {
+	public void saveProduct() throws ProductException {
+		// checking if a product hase been created before persisting it
+		if(this.product == null)
+			throw new ProductException("You must create a product before inserting it!");
+		
+		// checking if there is at least one marketing answer
+		//	if not we throw an exception!
+		//	(we have decided to have this requirement, given that nothing is specified,
+		//		that a product must have at least one marketing answer)
+		if(this.product.getMarketingQuestions() == null || this.product.getMarketingQuestions().isEmpty() || this.product.getMarketingQuestions().size() == 0)
+			throw new ProductException("You must insert at leas one Marketing Answer");
+		
 		// persisting the product with all the marketing questions cascading!
-		em.persist(product);
+		try {			
+			em.persist(this.product);
+		}
+		catch(PersistenceException e) {
+			throw new ProductException("There was an error while inserting the product, retry with correct values!");
+		}
 		
-		//Remove the product once persisted
+		//Remove the product once persisted, in order to be able to create a new one
 		this.product = null;
-		
-		//TODO: check if product is not null before persist send an exception
 	}
 
 	/**
@@ -153,6 +169,10 @@ public class ProductAdminService {
 		return this.product;
 	}
 	
+	/**
+	 * This will set the product to null.
+	 * If the Admin decide to discard the product before saving it.
+	 */
 	public void undoCreation() {
 		this.product = null;
 	}

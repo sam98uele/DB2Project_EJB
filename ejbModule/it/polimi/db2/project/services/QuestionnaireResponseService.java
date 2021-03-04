@@ -1,7 +1,6 @@
 package it.polimi.db2.project.services;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.ejb.Remove;
 import javax.ejb.Stateful;
@@ -156,8 +155,7 @@ public class QuestionnaireResponseService {
 				throw new InvalidAnswerException("The Marketing Answare are mandatory! You must submit all of them!");
 		}
 		
-		// the response will be submitted = 1 and completed = 0
-		this.response.setCompleted(true);
+		// setted as submitted
 		this.response.setSubmitted(true);
 		
 		// this will add this response to the product
@@ -180,8 +178,7 @@ public class QuestionnaireResponseService {
 		this.response.setMarketingAnswers(null);
 		this.response.setStatisticalAnswers(null);
 		
-		// completed but not submitted!
-		this.response.setCompleted(true);
+		// setted as not submitted!
 		this.response.setSubmitted(false);
 		
 		// this will add this response to the product
