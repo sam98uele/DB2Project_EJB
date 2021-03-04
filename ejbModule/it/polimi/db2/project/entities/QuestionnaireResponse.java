@@ -59,10 +59,10 @@ public class QuestionnaireResponse implements Serializable{
 	
 	/**
 	 * Relationship with table "statistical_answer"
-	 * A questionnaire contains many (in this case 3) statistical answers. This is a One to many relationship. Since the FK is 
-	 * contained in the entity representing the statistical_answer table, this is NOT THE OWNER of the relationship. Since we may 
-	 * not be interested immediately to the actual answers, the fetch type is lazy. If we remove the questionnaire, answers 
-	 * need to be removed.
+	 * A questionnaire contains many (in this case 3) statistical answers, which are represented in only one entity. 
+	 * This is a One to one relationship. Since the FK is contained in the entity representing the statistical_answer table, 
+	 * this is NOT THE OWNER of the relationship. Since we may not be interested immediately to the actual answers, the fetch type 
+	 * is lazy. If we remove the questionnaire, answers need to be removed.
 	 */
 	@OneToOne(mappedBy = "questionnaireResponse", orphanRemoval = true, cascade = CascadeType.ALL)
 	private StatisticalAnswer statisticalAnswers;
