@@ -15,11 +15,10 @@ import org.eclipse.persistence.indirection.IndirectList;
  */
 @Entity
 @Table(name = "questionnaire_response", schema="db2_project")
-/**
- * 
- * @NamedQueries TODO
- *
- */
+@NamedQueries(
+		{@NamedQuery(name = "QuestionnaireResponse.GetSubmittedProductsForShowingReviewsToUsers", 
+				query = "SELECT r FROM QuestionnaireResponse r WHERE r.product.id = :productOfTheDay and r.submitted = 1")}
+		)
 public class QuestionnaireResponse implements Serializable{
 	
 	/**
@@ -70,11 +69,10 @@ public class QuestionnaireResponse implements Serializable{
 	/**
 	 * Relationship with table "marketing_answer"
 	 * A questionnaire contains many marketing answers. This is a One to many relationship. Since the FK is contained in the 
-	 * entity representing the marketing_answer table, this is NOT THE OWNER of the relationship. Since we may not be interested 
-	 * immediately to the actual answers, the fetch type is lazy. If we remove the questionnaire, answers need to be removed.
+	 * entity representing the marketing_answer table, this is NOT THE OWNER of the relationship. Since generally we need the 
+	 * marketing answer, it is convenient to put the fetch type as EAGER. If we remove the questionnaire, answers need to be removed.
 	 */
-	// fetch = FetchType.LAZY
-	@OneToMany(mappedBy = "questionnaireResponse", orphanRemoval = true, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "questionnaireResponse", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<MarketingAnswer> marketingAnswers;
 	
 	/**
@@ -104,7 +102,7 @@ public class QuestionnaireResponse implements Serializable{
 	}
 
 	/**
-	 * Setter method for the primary key of the response to the questionnaire respone
+	 * Setter method for the primary key of the response to the questionnaire response
 	 * @param id
 	 */
 	public void setId(int id) {
