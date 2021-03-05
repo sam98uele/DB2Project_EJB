@@ -1,5 +1,8 @@
 package it.polimi.db2.project.services;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +21,8 @@ import it.polimi.db2.project.exceptions.CredentialsException;
 import it.polimi.db2.project.exceptions.InvalidActionException;
 import it.polimi.db2.project.exceptions.NoProductOfTheDayException;
 import it.polimi.db2.project.exceptions.RegistrationException;
+
+import it.polimi.db2.project.services.PasswordEncryptionService;
 
 /**
  * This is the service class for the user.
@@ -67,8 +72,8 @@ public class UserService {
 		List<User> uList = null;
 		try {
 			// getting username linked to the username or password
-			uList = em.createNamedQuery("User.checkCredentials", User.class)
-					.setParameter(1, username).setParameter(2, password)
+			uList = em.createNamedQuery("User.getUserByUsername", User.class)
+					.setParameter(1, username)
 					.getResultList();
 		} catch (PersistenceException e) {
 			// if there are problems during the execution of the query,
@@ -83,6 +88,18 @@ public class UserService {
 		else if (uList.size() == 1) {
 			// getting the user object
 			User user = uList.get(0);
+			
+			try {
+				if(!PasswordEncryptionService.authenticate(
+						password, 
+						Base64.getDecoder().decode(user.getPassword()), 
+						Base64.getDecoder().decode(user.getPassword())))
+					throw new CredentialsException("Error! Username or Password is wrong!");
+			} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				throw new CredentialsException("Couldn't perform the login!");
+			}
 			
 			// saving in the logs the that the user logged in
 			Date date = Calendar.getInstance().getTime();
@@ -101,15 +118,18 @@ public class UserService {
 		throw new CredentialsException("Error! Username of Password is wrong!");
 	}
 	
+	
+	
 	/**
 	 * This method is used to perform a registration of a user
 	 * (admins are not created or assigned with the application)
 	 * @param username the username of the user
+	 * @param email the email of the user
 	 * @param password the password of the user
 	 * @return the newly created user
 	 * @throws RegistrationException if there are problems with the registration
 	 */
-	public User registration(String username, String password) throws RegistrationException {
+	public User registration(String username, String email, String password) throws RegistrationException {
 		// checking if the username is available
 		List<User> users_same_username = em.createQuery(
 				"SELECT r FROM User r WHERE r.username = ?1", 
@@ -119,10 +139,26 @@ public class UserService {
 		
 		if(users_same_username != null && users_same_username.isEmpty() && users_same_username.size() != 0)
 			throw new RegistrationException("The Username is not available");
-			
+		
+		String user_password;
+		String user_salt;
+		try {
+			byte[] salt = PasswordEncryptionService.generateSalt();
+			byte[] encoded_passoword = PasswordEncryptionService.getEncryptedPassword(password, salt);
+			user_password = Base64.getEncoder().encodeToString(encoded_passoword);
+			user_salt = Base64.getEncoder().encodeToString(salt);
+		} catch (NoSuchAlgorithmException | InvalidKeySpecException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw new RegistrationException("Error during registration - 01");
+		}
+		
+		if(user_password == null || user_salt == null)
+			throw new RegistrationException("Error during registration - 02");
+		
 		// if all ok, creating the user
-		// and persist it
-		User user = new User(username, password);
+		// and persist it 
+		User user = new User(username, email, user_password, user_salt);
 		try {
 			em.persist(user);
 		}
@@ -176,7 +212,7 @@ public class UserService {
 		// TODO: completed if removed need to be removed also in this query
 		List<User> l_users = em.createQuery(
 				"SELECT u FROM User u WHERE u.isAdmin != true"
-				+ " AND u in (SELECT r.user FROM Product p JOIN p.questionnaireResponses r WHERE p.date = CURRENT_DATE AND r.completed = true AND r.submitted=true)"
+				+ " AND u in (SELECT r.user FROM Product p JOIN p.questionnaireResponses r WHERE p.date = CURRENT_DATE AND r.submitted=true)"
 				+ " ORDER BY u.points DESC", 
 				User.class)
 				.getResultList();

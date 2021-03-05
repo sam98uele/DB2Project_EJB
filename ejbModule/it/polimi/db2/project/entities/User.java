@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * 
  * Entity class for table user
@@ -12,7 +15,12 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "user", schema="db2_project")
-@NamedQuery(name = "User.checkCredentials", query = "SELECT r FROM User r  WHERE r.username = ?1 and r.password = ?2")
+@NamedQueries(
+		{@NamedQuery(name = "User.checkCredentials", query = "SELECT r FROM User r  WHERE r.username = ?1 and r.password = ?2"),
+			@NamedQuery(name = "User.getUserByUsername", query = "SELECT r FROM User r  WHERE r.username = ?1")
+		}
+)
+
 public class User implements Serializable{
 	
 	//----ATTRIBUTES----
@@ -43,6 +51,13 @@ public class User implements Serializable{
 	private String username;
 	
 	/**
+	 * TODO: docs
+	 */
+	// , unique = true
+	@Column(columnDefinition = "varchar(45)", nullable = false)
+	private String email;
+	
+	/**
 	 * Password of the user. Annotation needed to specify the varchar property of the DB
 	 * We do not really need the password available, and also we set it to null before send it 
 	 * to the Web component to not expose the password. 
@@ -52,6 +67,13 @@ public class User implements Serializable{
 	@Column(columnDefinition = "varchar(45)", nullable = false)
 	@Basic(fetch = FetchType.LAZY)
 	private String password;
+	
+	/**
+	 * TODO: docs
+	 */
+	@Column(columnDefinition = "varchar(45)", nullable = false)
+	@Basic(fetch = FetchType.LAZY)
+	private String salt;
 	
 	/**
 	 * eventually we will need a tag Type(type = "org.hibernate.type.NumericBooleanType") in order to map a boolean to a TINYINT, 
@@ -105,10 +127,13 @@ public class User implements Serializable{
 	 * 
 	 * @param username the username of the user
 	 * @param password the password of the user
+	 * @param salt the salt of the password of the user
 	 */
-	public User(String username, String password) {
+	public User(String username, String email, String password, String salt) {
 		this.username = username;
+		this.email = email;
 		this.password = password;
+		this.salt = salt;
 		this.isAdmin = false; // this constructor will create normal users
 		this.blocked = false; // by default the user is not blocked
 	}
@@ -152,9 +177,26 @@ public class User implements Serializable{
 	}
 	
 	/**
+	 * Getter method for email
+	 * @return String email of the user
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * Setter method for email
+	 * @param email of the user
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	/**
 	 * Getter method for password
 	 * @return String password of the user
 	 */
+	@JsonIgnore // this will prevent the password to be sent to the Web
 	public String getPassword() {
 		return password;
 	}
@@ -163,8 +205,27 @@ public class User implements Serializable{
 	 * Setter method for the password
 	 * @param password of the user
 	 */
+	@JsonProperty // marking it as setter of the attribute
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	/**
+	 * Getter method for salt
+	 * @return String salt of the user
+	 */
+	@JsonIgnore // this will prevent the salt to be sent to the Web
+	public String getSalt() {
+		return salt;
+	}
+	
+	/**
+	 * Setter method for the salt
+	 * @param salt of the password of the user
+	 */
+	@JsonProperty // marking it as setter of the attribute
+	public void setSalt(String salt) {
+		this.salt = salt;
 	}
 	
 	/**
