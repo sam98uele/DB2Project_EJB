@@ -179,7 +179,7 @@ public class QuestionnaireAdminService {
 		try {
 			
 			/**
-			 * The following query is a named query which retrieve all the questionnaire response answered to the specific user 
+			 * The following query is a named query which retrieve all the questionnaire responses answered to the specific user 
 			 * passed as parameter, named userID, to this method.
 			 */
 			responses = em.createNamedQuery("QuestionnaireResponse.GetQuestionnaireAnsweredBySpecificUser",
@@ -198,5 +198,35 @@ public class QuestionnaireAdminService {
 		 * Returning the list of responses
 		 */
 		return responses;
+	}
+	
+	/**
+	 * This method will return list of past schedule of the product of the day.
+	 * Date will be less than current date.
+	 * @return list of product scheduled in the past (N.B.: check the list because could be null if there are no past schedule)
+	 */
+	public List<Product> getPastScheduledProductOfTheDay() throws QueryException{
+		
+		/**
+		 * Initializing list of product of the day
+		 */
+		List<Product> pastSchedule = null;
+		
+		/**
+		 * The following query is a named query which retrieve all the products which has a date in which they will be product of 
+		 * the day less than the current date (only less then, not equal)
+		 */
+		try {
+			pastSchedule = em.createNamedQuery("Product.getPastProductOfTheDay", Product.class)
+					.getResultList();
+		}catch(IllegalStateException | PersistenceException e) {
+			
+			e.printStackTrace();
+			throw new QueryException("Unable to retrieve past product of the day");
+		}
+		/**
+		 * Returning product of the day
+		 */
+		return pastSchedule;
 	}
 }
