@@ -1,7 +1,7 @@
 package it.polimi.db2.project.exceptions;
 
 /**
- * This is raised when there are problems during the insertion of a product
+ * This is raised when there are problems during the insertion / retrieve a product
  * 
  * @author Samuele
  *
