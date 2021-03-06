@@ -93,7 +93,7 @@ public class UserService {
 				if(!PasswordEncryptionService.authenticate(
 						password, 
 						Base64.getDecoder().decode(user.getPassword()), 
-						Base64.getDecoder().decode(user.getPassword())))
+						Base64.getDecoder().decode(user.getSalt())))
 					throw new CredentialsException("Error! Username or Password is wrong!");
 			} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
 				// TODO Auto-generated catch block
