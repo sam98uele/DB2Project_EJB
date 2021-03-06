@@ -12,6 +12,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 
+import org.eclipse.persistence.config.CacheUsage;
+import org.eclipse.persistence.config.HintValues;
+import org.eclipse.persistence.config.QueryHints;
+
 import it.polimi.db2.project.entities.Log;
 import it.polimi.db2.project.entities.Product;
 import it.polimi.db2.project.entities.QuestionnaireResponse;
@@ -74,6 +78,7 @@ public class UserService {
 			// getting username linked to the username or password
 			uList = em.createNamedQuery("User.getUserByUsername", User.class)
 					.setParameter(1, username)
+					.setHint("javax.persistence.cache.storeMode", "REFRESH")
 					.getResultList();
 		} catch (PersistenceException e) {
 			// if there are problems during the execution of the query,
@@ -215,6 +220,7 @@ public class UserService {
 				+ " AND u in (SELECT r.user FROM Product p JOIN p.questionnaireResponses r WHERE p.date = CURRENT_DATE AND r.submitted=true)"
 				+ " ORDER BY u.points DESC", 
 				User.class)
+				.setHint(QueryHints.REFRESH, HintValues.TRUE) // do not cache the results
 				.getResultList();
 		
 		return l_users;
