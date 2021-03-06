@@ -16,8 +16,13 @@ import org.eclipse.persistence.indirection.IndirectList;
 @Entity
 @Table(name = "questionnaire_response", schema="db2_project")
 @NamedQueries(
-		{@NamedQuery(name = "QuestionnaireResponse.GetSubmittedProductsForShowingReviewsToUsers", 
-				query = "SELECT r FROM QuestionnaireResponse r WHERE r.product.id = :productOfTheDay and r.submitted = 1")}
+		{@NamedQuery(name = "QuestionnaireResponse.GetSubmittedQuestionnairesForShowingReviewsToUsers", 
+				query = "SELECT r FROM QuestionnaireResponse r WHERE r.product.id = :productOfTheDay and r.submitted = :submitted"),
+		@NamedQuery(name = "QuestionnaireResponse.GetUsersWhoCompiledQuestionnaireGivenParameterSubmitted",
+				query = "SELECT r.user FROM QuestionnaireResponse r WHERE r.product.id = :idOfTheProduct and "
+						+ "r.submitted = :submitted"),
+		@NamedQuery(name = "QuestionnaireResponse.GetQuestionnaireAnsweredBySpecificUser",
+		query = "SELECT r FROM QuestionnaireResponse r WHERE r.user.id = :userID")}
 		)
 public class QuestionnaireResponse implements Serializable{
 	
