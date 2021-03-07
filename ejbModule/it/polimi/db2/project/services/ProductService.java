@@ -6,6 +6,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.apache.openjpa.persistence.PersistenceException;
+import org.eclipse.persistence.config.HintValues;
+import org.eclipse.persistence.config.QueryHints;
 
 import it.polimi.db2.project.entities.Product;
 import it.polimi.db2.project.exceptions.QueryException;
@@ -62,6 +64,7 @@ public class ProductService {
 		 */
 		try {
 			pastSchedule = em.createNamedQuery("Product.getPastProductOfTheDay", Product.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE) // do not cache the results
 					.getResultList();
 		}catch(IllegalStateException | PersistenceException e) {
 			
