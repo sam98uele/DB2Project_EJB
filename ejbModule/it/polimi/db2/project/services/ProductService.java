@@ -1,5 +1,6 @@
 package it.polimi.db2.project.services;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -13,6 +14,7 @@ import it.polimi.db2.project.entities.Product;
  * @author Samuele
  *
  */
+@Stateless
 public class ProductService {
 	/**
 	 * JPA Entity Manager
