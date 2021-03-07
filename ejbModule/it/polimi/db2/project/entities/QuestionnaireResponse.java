@@ -1,11 +1,16 @@
 package it.polimi.db2.project.entities;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.*;
 
+import org.eclipse.persistence.indirection.IndirectCollection;
 import org.eclipse.persistence.indirection.IndirectList;
+
+import it.polimi.db2.project.comparator.CompareMarketingAnswer;
 
 /**
  * 
@@ -15,15 +20,15 @@ import org.eclipse.persistence.indirection.IndirectList;
  */
 @Entity
 @Table(name = "questionnaire_response", schema="db2_project")
-@NamedQueries(
-		{@NamedQuery(name = "QuestionnaireResponse.GetSubmittedQuestionnairesForShowingReviewsToUsers", 
-				query = "SELECT r FROM QuestionnaireResponse r WHERE r.product.id = :productOfTheDay and r.submitted = :submitted"),
-		@NamedQuery(name = "QuestionnaireResponse.GetUsersWhoCompiledQuestionnaireGivenParameterSubmitted",
-				query = "SELECT r.user FROM QuestionnaireResponse r WHERE r.product.id = :idOfTheProduct and "
-						+ "r.submitted = :submitted"),
-		@NamedQuery(name = "QuestionnaireResponse.GetQuestionnaireAnsweredBySpecificUser",
-		query = "SELECT r FROM QuestionnaireResponse r WHERE r.user.id = :userID")}
-		)
+@NamedQueries({
+	@NamedQuery(name = "QuestionnaireResponse.GetSubmittedQuestionnairesForShowingReviewsToUsers", 
+			query = "SELECT r FROM QuestionnaireResponse r WHERE r.product.id = :productOfTheDay and r.submitted = :submitted"),
+	@NamedQuery(name = "QuestionnaireResponse.GetUsersWhoCompiledQuestionnaireGivenParameterSubmitted",
+			query = "SELECT r.user FROM QuestionnaireResponse r WHERE r.product.id = :idOfTheProduct and "
+					+ "r.submitted = :submitted"),
+	@NamedQuery(name = "QuestionnaireResponse.GetQuestionnaireAnsweredBySpecificUser",
+	query = "SELECT r FROM QuestionnaireResponse r WHERE r.user.id = :userID")
+})
 public class QuestionnaireResponse implements Serializable{
 	
 	/**
@@ -231,5 +236,23 @@ public class QuestionnaireResponse implements Serializable{
 		}else {
 			return "";
 		}
+	}
+	
+	public List<MarketingAnswer> getOrderedMarketingAnswers(){
+//		return this.marketingAnswers.stream()
+//				.sorted((a1, a2) -> Integer.compare(a1.getQuestion().getOrdering(), a2.getQuestion().getOrdering()))
+//				.collect(Collectors.toList());
+		List<MarketingAnswer> ma = new IndirectList<>(this.marketingAnswers);
+//		Collections.sort(ma, new CompareMarketingAnswer());
+//		ma.sort(new CompareMarketingAnswer());
+		
+		
+	    Object sortTargetObject = ((IndirectCollection) ma).getDelegateObject();
+	    if (sortTargetObject instanceof List<?>) {
+	        List<MarketingAnswer> sortTarget= (List<MarketingAnswer>) sortTargetObject;
+	        Collections.sort(sortTarget,new CompareMarketingAnswer());
+	    }
+	    
+	    return ma;
 	}
 }
