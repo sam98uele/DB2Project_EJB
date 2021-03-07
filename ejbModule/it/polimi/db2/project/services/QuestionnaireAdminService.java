@@ -162,11 +162,12 @@ public class QuestionnaireAdminService {
 	 * The questionnaire retrieved could be both submitted or cancelled. N.B.: the list returned could be null, need to be 
 	 * checked at front end
 	 * @param userID is the user of which you want to retrieve the questionnaires
+	 * @param productID is the product from which you want to retrieve the questionnaire
 	 * @return return the list of questionnaire response submitted by the user, them could be both submitted or cancelled, they 
 	 * are not filtered, they are returned as they are. The returned list could be null
 	 * @throws QueryException if unable to retrieve questionnaire answered by a specific user while calling the named query
 	 */
-	public List<QuestionnaireResponse> getAllQuestionnaireAnsweredBySpecificUser(Integer userID) throws QueryException {
+	public List<QuestionnaireResponse> getAllQuestionnaireAnsweredBySpecificUserAndProduct(Integer userID, Integer productID) throws QueryException {
 		
 		/**
 		 * Initializing a temporary list. This list will be filled by the query
@@ -180,17 +181,20 @@ public class QuestionnaireAdminService {
 			
 			/**
 			 * The following query is a named query which retrieve all the questionnaire responses answered to the specific user 
-			 * passed as parameter, named userID, to this method.
+			 * passed as parameter, named userID, and about a specific product given its id passed as parameter productID to 
+			 * this method.
 			 */
-			responses = em.createNamedQuery("QuestionnaireResponse.GetQuestionnaireAnsweredBySpecificUser",
+			responses = em.createNamedQuery("QuestionnaireResponse.GetQuestionnaireAnsweredBySpecificUserAndProduct",
 						QuestionnaireResponse.class)
 					.setParameter("userID", userID)
+					.setParameter("productID", productID)
 					.getResultList();
 			
 		}catch(IllegalStateException | PersistenceException e) {
 			
 			e.printStackTrace();
-			throw new QueryException("Unable to return questionnaire responded by user with id = "+userID);
+			throw new QueryException("Unable to return questionnaire responded by user with id = "+userID+" and about the "
+					+ "product with id ="+productID);
 			
 		}
 		
