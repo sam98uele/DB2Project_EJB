@@ -1,11 +1,16 @@
 package it.polimi.db2.project.entities;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.persistence.*;
 
+import org.eclipse.persistence.indirection.IndirectCollection;
 import org.eclipse.persistence.indirection.IndirectList;
+
+import it.polimi.db2.project.comparator.CompareMarketingAnswer;
 
 /**
  * 
@@ -231,5 +236,23 @@ public class QuestionnaireResponse implements Serializable{
 		}else {
 			return "";
 		}
+	}
+	
+	public List<MarketingAnswer> getOrderedMarketingAnswers(){
+//		return this.marketingAnswers.stream()
+//				.sorted((a1, a2) -> Integer.compare(a1.getQuestion().getOrdering(), a2.getQuestion().getOrdering()))
+//				.collect(Collectors.toList());
+		List<MarketingAnswer> ma = new IndirectList<>(this.marketingAnswers);
+//		Collections.sort(ma, new CompareMarketingAnswer());
+//		ma.sort(new CompareMarketingAnswer());
+		
+		
+	    Object sortTargetObject = ((IndirectCollection) ma).getDelegateObject();
+	    if (sortTargetObject instanceof List<?>) {
+	        List<MarketingAnswer> sortTarget= (List<MarketingAnswer>) sortTargetObject;
+	        Collections.sort(sortTarget,new CompareMarketingAnswer());
+	    }
+	    
+	    return ma;
 	}
 }

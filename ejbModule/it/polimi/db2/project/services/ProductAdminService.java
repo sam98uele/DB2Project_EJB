@@ -39,6 +39,8 @@ public class ProductAdminService {
 	 */
 	private Product product;
 	
+	private int question_number = 0;
+	
 	// ---- METHODS ----
 	
 	/**
@@ -108,10 +110,13 @@ public class ProductAdminService {
 		}
 		// creating the new question
 		MarketingQuestion marketingQuestion = new MarketingQuestion(question);
+		marketingQuestion.setOrdering(this.question_number);
 		
 		// adding this question to the product
 		//	the product will update the relation counterpart!
 		this.product.addMarketingQuestion(marketingQuestion);
+		
+		this.question_number++;
 		
 		// returning the update product with the new question
 		return this.product;

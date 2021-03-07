@@ -34,6 +34,15 @@ public class MarketingQuestion implements Serializable{
 	private int id;
 	
 	/**
+	 * This will define the order to order the questions when they are displayed in the questionnaire
+	 * or when they are displayed answer
+	 * Given that JPA inserts the question in a random order and not in the order the Admin has submitted
+	 * them, we need this to save them in the correct order.
+	 */
+	@Column(columnDefinition = "int default 0")
+	private int ordering;
+	
+	/**
 	 * String containing the actual question
 	 */
 	@Column(columnDefinition = "varchar(200)", nullable = false)
@@ -86,6 +95,22 @@ public class MarketingQuestion implements Serializable{
 	 */
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	/**
+	 * Getter method for the ordering of the question
+	 * @return the ordering
+	 */
+	public int getOrdering() {
+		return ordering;
+	}
+	
+	/**
+	 * Setter method for the ordering of the question
+	 * @param ordering the question
+	 */
+	public void setOrdering(int ordering) {
+		this.ordering = ordering;
 	}
 
 	/**
