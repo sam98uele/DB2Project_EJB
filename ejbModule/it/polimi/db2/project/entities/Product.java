@@ -81,6 +81,7 @@ public class Product implements Serializable{
 	 * use LAZY fetch type.
 	 */
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+	@OrderBy("ordering ASC")
 	private List<MarketingQuestion> marketingQuestions;
 	
 	// ---- CONSTRUCTORS
