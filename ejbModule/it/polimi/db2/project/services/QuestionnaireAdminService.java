@@ -163,16 +163,23 @@ public class QuestionnaireAdminService {
 	 * checked at front end
 	 * @param userID is the user of which you want to retrieve the questionnaires
 	 * @param productID is the product from which you want to retrieve the questionnaire
-	 * @return return the list of questionnaire response submitted by the user, them could be both submitted or cancelled, they 
-	 * are not filtered, they are returned as they are. The returned list could be null
-	 * @throws QueryException if unable to retrieve questionnaire answered by a specific user while calling the named query
+	 * @return return the questionnaire response submitted by the user about the specific product, it can be either submitted 
+	 * or cancelled, this is not filtered looking at the parameter "submitted". The returned object could be null if the user did 
+	 * not answered the questionnaire relative to a specific product
+	 * @throws QueryException if unable to retrieve questionnaire answered by a specific user while calling the named query or if
+	 * the questionnaire response is multiple: you could not have more than one answer per user to a product
 	 */
-	public List<QuestionnaireResponse> getAllQuestionnaireAnsweredBySpecificUserAndProduct(Integer userID, Integer productID) throws QueryException {
+	public QuestionnaireResponse getAllQuestionnaireAnsweredBySpecificUserAndProduct(Integer userID, Integer productID) throws QueryException {
 		
 		/**
 		 * Initializing a temporary list. This list will be filled by the query
 		 */
 		List<QuestionnaireResponse> responses = null;
+		
+		/**
+		 * Initializing an object Questionnaire response, this will be the returned one
+		 */
+		QuestionnaireResponse response = null;
 		
 		/**
 		 * We need to query the database retrieving all the questionnaireResponses responded by a specific user.
@@ -198,10 +205,36 @@ public class QuestionnaireAdminService {
 			
 		}
 		
+		
 		/**
-		 * Returning the list of responses
+		 * Returning the response: if the method found more than a result, something went wrong, otherwise we can return the first 
+		 * element of the list. This check is performed in order to ensure that the inserting part went well
 		 */
-		return responses;
+		if(responses.size()<=1) {
+			/**
+			 * If I am here, then I got only one element or no one
+			 */
+			if(responses.isEmpty() || responses.size()==0) {
+				
+				/**
+				 * If I am here, the list is empty, so I directly return the "response element" as initialized, which is null
+				 */
+				return response;
+			}else {
+				/**
+				 * If I am here, I got only one element, i return that one
+				 */
+				response = responses.get(0);
+				return response;
+			}
+		}else {
+			/**
+			 * If I am here, I got more than one element. This should not have happened
+			 */
+			throw new QueryException("There is more than one element satisfying the query with parameters userID = "
+					+userID+" and productID = "+productID+".\n This should not happen: a person should be able to answer only\n"+
+					"a questionnaire relative to a product (either none)");
+		}
 	}
 	
 }
