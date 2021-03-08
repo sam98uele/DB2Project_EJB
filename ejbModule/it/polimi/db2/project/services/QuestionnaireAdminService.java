@@ -97,9 +97,9 @@ public class QuestionnaireAdminService {
 			 * settings of the relationship will do the rest, and will delete all the children (triggers will perform subtraction 
 			 * of points). This will be scheduled for update in the database
 			 */
+			// TODO: update the comment
 			//p.setQuestionnaireResponses(null);
 			em.remove(p);
-			em.flush();
 		}else {
 			
 			/**
