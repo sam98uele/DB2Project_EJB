@@ -10,6 +10,7 @@ import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 
 import it.polimi.db2.project.entities.Product;
+import it.polimi.db2.project.exceptions.ProductException;
 import it.polimi.db2.project.exceptions.QueryException;
 
 /**
@@ -33,14 +34,15 @@ public class ProductService {
 	 * 
 	 * @param productId the Id of the product
 	 * @return the product object that has the input id
+	 * @throws ProductException if there are problems in finding the product
 	 */
-	public Product getProductById(int productId) {
+	public Product getProductById(int productId) throws ProductException {
 		Product p = null;	
 		
 		try {
 			p = em.find(Product.class, productId);
 		}catch(IllegalArgumentException e) {
-			e.printStackTrace();
+			throw new ProductException("Unable to find the Product");
 		}
 		
 		return p;

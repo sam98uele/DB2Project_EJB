@@ -201,7 +201,7 @@ public class QuestionnaireAdminService {
 			
 		}catch(IllegalStateException | PersistenceException e) {
 			
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new QueryException("Unable to return questionnaire responded by user with id = "+userID+" and about the "
 					+ "product with id ="+productID);
 			

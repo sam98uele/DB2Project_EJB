@@ -212,16 +212,22 @@ public class UserService {
 	 * only the users who have submitted successfully it!
 	 * 
 	 * @return the leaderboard
+	 * @throws ApplicationErrorException if there is a problem in serving the request
 	 */
-	public List<User> getLeaderboard() {
-		// TODO: completed if removed need to be removed also in this query
-		List<User> l_users = em.createQuery(
-				"SELECT u FROM User u WHERE u.isAdmin != true"
-				+ " AND u in (SELECT r.user FROM Product p JOIN p.questionnaireResponses r WHERE p.date = CURRENT_DATE AND r.submitted=true)"
-				+ " ORDER BY u.points DESC", 
-				User.class)
-				.setHint(QueryHints.REFRESH, HintValues.TRUE) // do not cache the results
-				.getResultList();
+	public List<User> getLeaderboard() throws ApplicationErrorException {
+		List<User> l_users = null;
+		try {
+			l_users = em.createQuery(
+					"SELECT u FROM User u WHERE u.isAdmin != true"
+					+ " AND u in (SELECT r.user FROM Product p JOIN p.questionnaireResponses r WHERE p.date = CURRENT_DATE AND r.submitted=true)"
+					+ " ORDER BY u.points DESC", 
+					User.class)
+					.setHint(QueryHints.REFRESH, HintValues.TRUE) // do not cache the results
+					.getResultList();
+		}
+		catch (PersistenceException e) {
+			throw new ApplicationErrorException("There was an error while serving your request!");
+		}
 		
 		return l_users;
 	}
