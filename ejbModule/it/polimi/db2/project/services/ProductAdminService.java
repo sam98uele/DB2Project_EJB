@@ -75,7 +75,7 @@ public class ProductAdminService {
 		
 		// getting the product of the day of the day specified for that product
 		List<Product> prodDay = em.createNamedQuery("Product.getProductOfTheDay", Product.class)
-				.setParameter("date", date, TemporalType.DATE)
+				.setParameter("date", date) // , TemporalType.DATE
 				.getResultList();
 		
 		// if there are products of the day available, then it's not possible to add a new one for that day!
