@@ -104,7 +104,7 @@ public class ProductUserService {
 			
 			//this query retrieves a list of questionnaire responses correlated to the product passed as parameter.
 			//in the named query is checked that "submitted=1" => not canceled.
-			temporaryList = em.createNamedQuery("QuestionnaireResponse.GetSubmittedQuestionnairesForShowingReviewsToUsers", 
+			temporaryList = em.createNamedQuery("QuestionnaireResponse.SubmittedQuestionnaireOfProduct", 
 					QuestionnaireResponse.class)
 					.setParameter("productOfTheDay", prodDay.getId())
 					.setParameter("submitted", true)

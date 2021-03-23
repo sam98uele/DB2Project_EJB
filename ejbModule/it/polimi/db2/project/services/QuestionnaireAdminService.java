@@ -35,7 +35,7 @@ public class QuestionnaireAdminService {
 	
 	/**
 	 * This is used to erase all the questionnaire data related to a specific product
-	 * note that all the responses are erased and the points of the users are removed by triggers (TODO: triggers)
+	 * note that all the responses are erased and the points of the users are removed by triggers
 	 * @param productId the Id of the product to erase all it's questionnaire data. 
 	 * @throws InvalidActionException if the id of the product passed to this method is an ID relative to a product which is 
 	 * more recent than the current date (product date need to be lower than the current one, neither equal!).
@@ -96,9 +96,9 @@ public class QuestionnaireAdminService {
 			 * settings of the relationship will do the rest, and will delete all the children (triggers will perform subtraction 
 			 * of points). This will be scheduled for update in the database
 			 */
+			// 
 			//p.setQuestionnaireResponses(null);
 			em.remove(p);
-			em.flush();
 		}else {
 			
 			/**
@@ -141,7 +141,7 @@ public class QuestionnaireAdminService {
 			 * questionnaire response about the product of the day given as id by the parameter
 			 */
 			
-			users = em.createNamedQuery("QuestionnaireResponse.GetUsersWhoCompiledQuestionnaireGivenParameterSubmitted", 
+			users = em.createNamedQuery("QuestionnaireResponse.UsersWhoCompiledQuestionnaires", 
 					User.class)
 					.setParameter("idOfTheProduct", productID)
 					.setParameter("submitted", subOrCanc)
@@ -194,7 +194,7 @@ public class QuestionnaireAdminService {
 			 * passed as parameter, named userID, and about a specific product given its id passed as parameter productID to 
 			 * this method.
 			 */
-			responses = em.createNamedQuery("QuestionnaireResponse.GetQuestionnaireAnsweredBySpecificUserAndProduct",
+			responses = em.createNamedQuery("QuestionnaireResponse.RetrieveSpecificQuestionnaire",
 						QuestionnaireResponse.class)
 					.setParameter("userID", userID)
 					.setParameter("productID", productID)
@@ -202,7 +202,7 @@ public class QuestionnaireAdminService {
 			
 		}catch(IllegalStateException | PersistenceException e) {
 			
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new QueryException("Unable to return questionnaire responded by user with id = "+userID+" and about the "
 					+ "product with id ="+productID);
 			

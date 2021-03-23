@@ -12,11 +12,6 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "log", schema="db2_project")
-/**
- * 
- * @NamedQueries TODO
- *
- */
 public class Log implements Serializable{
 
 	//----ATTRIBUTES----

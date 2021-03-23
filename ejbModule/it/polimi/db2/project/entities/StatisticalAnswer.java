@@ -11,11 +11,6 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "statistical_answer", schema="db2_project")
-/**
- * 
- * @NamedQueries TODO
- *
- */
 public class StatisticalAnswer implements Serializable{
 
 	/**
@@ -119,7 +114,7 @@ public class StatisticalAnswer implements Serializable{
 	 * @return
 	 */
 	public Integer getQ3() {
-		return this.q2;
+		return this.q3;
 	}
 
 	/**

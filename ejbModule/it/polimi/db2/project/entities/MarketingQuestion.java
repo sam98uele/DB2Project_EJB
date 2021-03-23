@@ -12,11 +12,6 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "marketing_questions", schema = "db2_project")
-/**
- * 
- * @NamedQueries TODO
- *
- */
 public class MarketingQuestion implements Serializable{
 
 	/**

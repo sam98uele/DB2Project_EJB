@@ -51,7 +51,7 @@ public class User implements Serializable{
 	private String username;
 	
 	/**
-	 * TODO: docs
+	 *
 	 */
 	// , unique = true
 	@Column(columnDefinition = "varchar(45)", nullable = false)
@@ -69,7 +69,7 @@ public class User implements Serializable{
 	private String password;
 	
 	/**
-	 * TODO: docs
+	 *
 	 */
 	@Column(columnDefinition = "varchar(45)", nullable = false)
 	@Basic(fetch = FetchType.LAZY)

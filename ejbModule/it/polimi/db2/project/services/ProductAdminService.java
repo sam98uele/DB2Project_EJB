@@ -69,11 +69,13 @@ public class ProductAdminService {
 			throw new InvalidInputArgumentException("The inserted date is before the current date! You can insert only product in a date equalt to today or a future date!");
 		
 		// TODO: THE DATE DOES NOT WORK PROPERLY
-		java.sql.Date dateSQL = new java.sql.Date(date.getTime());
+//		java.sql.Date dateSQL = new java.sql.Date(date.getTime());
+		
+//		System.out.print(date.toString());
 		
 		// getting the product of the day of the day specified for that product
 		List<Product> prodDay = em.createNamedQuery("Product.getProductOfTheDay", Product.class)
-				.setParameter("date", dateSQL)
+				.setParameter("date", date) // , TemporalType.DATE
 				.getResultList();
 		
 		// if there are products of the day available, then it's not possible to add a new one for that day!
@@ -83,7 +85,7 @@ public class ProductAdminService {
 		//Date dateAA = Calendar.getInstance().getTime();
 		
 		// creating the new product
-		Product product = new Product(name, dateSQL, img, description);
+		Product product = new Product(name, date, img, description);
 		
 		this.product = product;
 

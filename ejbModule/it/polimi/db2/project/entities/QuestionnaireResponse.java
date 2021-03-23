@@ -20,15 +20,15 @@ import it.polimi.db2.project.comparator.CompareMarketingAnswer;
  */
 @Entity
 @Table(name = "questionnaire_response", schema="db2_project")
-@NamedQueries(
-		{@NamedQuery(name = "QuestionnaireResponse.GetSubmittedQuestionnairesForShowingReviewsToUsers", 
+@NamedQueries({
+	@NamedQuery(name = "QuestionnaireResponse.SubmittedQuestionnaireOfProduct", 
 				query = "SELECT r FROM QuestionnaireResponse r WHERE r.product.id = :productOfTheDay and r.submitted = :submitted"),
-		@NamedQuery(name = "QuestionnaireResponse.GetUsersWhoCompiledQuestionnaireGivenParameterSubmitted",
+	@NamedQuery(name = "QuestionnaireResponse.UsersWhoCompiledQuestionnaires",
 				query = "SELECT r.user FROM QuestionnaireResponse r WHERE r.product.id = :idOfTheProduct and "
 						+ "r.submitted = :submitted"),
-		@NamedQuery(name = "QuestionnaireResponse.GetQuestionnaireAnsweredBySpecificUserAndProduct",
-		query = "SELECT r FROM QuestionnaireResponse r WHERE r.user.id = :userID and r.product.id = :productID")}
-		)
+	@NamedQuery(name = "QuestionnaireResponse.RetrieveSpecificQuestionnaire",
+		query = "SELECT r FROM QuestionnaireResponse r WHERE r.user.id = :userID and r.product.id = :productID")
+	})
 public class QuestionnaireResponse implements Serializable{
 	
 	/**

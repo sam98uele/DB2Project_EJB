@@ -2,7 +2,6 @@ package it.polimi.db2.project.entities;
 
 import java.io.Serializable;
 import java.util.*;
-import java.sql.Date;
 
 import javax.persistence.*;
 
@@ -43,14 +42,14 @@ public class Product implements Serializable{
 	/**
 	 * Date in which this product will be the product of the day
 	 */
-	//@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.DATE)
 	@Column(nullable = false)
 	private Date date;
 	
 	/**
 	 * Photo associated to the product
 	 */
-	// @Basic(fetch=FetchType.LAZY) // TODO: REMOVED BECAUSE IT IS ALWAYS NEEDED WITH THE IMAGE
+	// @Basic(fetch=FetchType.LAZY)  REMOVED BECAUSE IT IS ALWAYS NEEDED WITH THE IMAGE
 	@Lob
 	@Column(nullable = false)
 	private byte[] image;
