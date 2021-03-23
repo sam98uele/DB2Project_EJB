@@ -67,7 +67,6 @@ public class ProductService {
 					.setHint(QueryHints.REFRESH, HintValues.TRUE) // do not cache the results
 					.getResultList();
 		}catch(IllegalStateException | PersistenceException e) {
-			
 			e.printStackTrace();
 			throw new QueryException("Unable to retrieve past product of the day");
 		}

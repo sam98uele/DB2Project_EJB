@@ -41,7 +41,7 @@ public class QuestionnaireAdminService {
 	 * more recent than the current date (product date need to be lower than the current one, neither equal!).
 	 * @throws ProductException when not able to retrieve the product with id equal to the parameter productId
 	 */
-	public void deleteQuestionnaires(Integer productId) throws InvalidActionException, ProductException{
+	public Product deleteQuestionnaires(Integer productId) throws InvalidActionException, ProductException{
 		
 		/**
 		 * Initializing the date before retrieving it with a query;
@@ -57,8 +57,7 @@ public class QuestionnaireAdminService {
 			
 			p = em.find(Product.class, productId);
 		}catch(IllegalArgumentException e) {
-			
-			e.printStackTrace();
+			//e.printStackTrace();
 			throw new ProductException("Unable to retrieve the product relative. Error trying to perform find method.");
 		}
 		
@@ -67,7 +66,7 @@ public class QuestionnaireAdminService {
 		 * we cannot proceed. If the entity instance is not found is returned "null".
 		 */
 		if(p == null) {
-			throw new ProductException("Product with id = "+productId+" not existing!");
+			throw new ProductException("Product with id = "+productId+" does not existing!");
 		}
 		
 		/**
@@ -109,6 +108,8 @@ public class QuestionnaireAdminService {
 			throw new InvalidActionException("You cannot remove the questionnaires of this product, this is caused by a product "
 					+ "scheduled as product of the day either today, or in the future.");
 		}
+		
+		return p;
 	}
 	
 	/**
