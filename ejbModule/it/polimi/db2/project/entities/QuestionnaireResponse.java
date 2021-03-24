@@ -21,8 +21,8 @@ import it.polimi.db2.project.comparator.CompareMarketingAnswer;
 @Entity
 @Table(name = "questionnaire_response", schema="db2_project")
 @NamedQueries({
-	@NamedQuery(name = "QuestionnaireResponse.SubmittedQuestionnaireOfProduct", 
-				query = "SELECT r FROM QuestionnaireResponse r WHERE r.product.id = :productOfTheDay and r.submitted = :submitted"),
+	@NamedQuery(name = "QuestionnaireResponse.SubmittedQuestionnaireOfProductExceptSpecifiedUser", 
+				query = "SELECT r FROM QuestionnaireResponse r WHERE r.product.id = :productOfTheDay and r.submitted = :submitted and r.user.id <> :userId"),
 	@NamedQuery(name = "QuestionnaireResponse.UsersWhoCompiledQuestionnaires",
 				query = "SELECT r.user FROM QuestionnaireResponse r WHERE r.product.id = :idOfTheProduct and "
 						+ "r.submitted = :submitted"),
