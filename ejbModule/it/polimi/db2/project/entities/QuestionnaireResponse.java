@@ -174,7 +174,8 @@ public class QuestionnaireResponse implements Serializable{
 	 */
 	public void setStatisticalAnswers(StatisticalAnswer statisticalAnswers) {
 		this.statisticalAnswers = statisticalAnswers;
-		statisticalAnswers.setQuestionnaireResponse(this); // update the other part of the relation
+		if(statisticalAnswers != null)
+			statisticalAnswers.setQuestionnaireResponse(this); // update the other part of the relation
 	}
 
 	/**
@@ -194,8 +195,10 @@ public class QuestionnaireResponse implements Serializable{
 	 */
 	public void setMarketingAnswers(List<MarketingAnswer> marketingAnswers) {
 		this.marketingAnswers = marketingAnswers;
-		for(int i = 0; i<marketingAnswers.size(); i++)
-			marketingAnswers.get(i).setQuestionnaireResponse(this);
+		if(marketingAnswers != null) {
+			for(int i = 0; i<marketingAnswers.size(); i++)
+				marketingAnswers.get(i).setQuestionnaireResponse(this);
+		}
 	}
 	
 	/**
@@ -222,8 +225,10 @@ public class QuestionnaireResponse implements Serializable{
 	 */
 	public void addMarketingAnswers(MarketingAnswer marketingAnswer) {
 		getMarketingAnswers().add(marketingAnswer);
-		for(int i = 0; i<marketingAnswers.size(); i++)
-			marketingAnswers.get(i).setQuestionnaireResponse(this);
+		if(marketingAnswer != null) {
+			for(int i = 0; i<marketingAnswers.size(); i++)
+				marketingAnswers.get(i).setQuestionnaireResponse(this);
+		}
 	}
 	
 	/**
