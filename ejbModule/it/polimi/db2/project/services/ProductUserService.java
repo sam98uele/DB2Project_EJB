@@ -45,7 +45,7 @@ public class ProductUserService {
 		}
 		catch(IllegalStateException | PersistenceException e) {
 			
-			e.printStackTrace();
+			//e.printStackTrace();
 			throw new NoProductOfTheDayException("Unable to retrieve the product of the day.");
 			
 		}
@@ -87,7 +87,7 @@ public class ProductUserService {
 		try {
 			prodDay = getProductOfTheDay();
 		}catch(NoProductOfTheDayException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
 		/**
