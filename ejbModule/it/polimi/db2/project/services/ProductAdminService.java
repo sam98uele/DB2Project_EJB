@@ -130,9 +130,11 @@ public class ProductAdminService {
 	 *  
 	 * @param marketingQuestionId the Id of the marketing question to remove
 	 * @return the updated product
+	 * @throws InvalidInputArgumentException 
 	 */
-	public Product deleteMarketingQuestion(Integer marketingQuestionId) {
+	public Product deleteMarketingQuestion(Integer marketingQuestionId) throws InvalidInputArgumentException {
 		// removing the marketing question (if it exists)	
+		if(marketingQuestionId >= this.product.getMarketingQuestions().size()) throw new InvalidInputArgumentException("");
 		this.product.getMarketingQuestions().remove(marketingQuestionId.intValue());
 		
 		// returning the update product

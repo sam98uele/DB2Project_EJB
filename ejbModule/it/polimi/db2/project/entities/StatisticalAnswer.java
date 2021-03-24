@@ -89,7 +89,7 @@ public class StatisticalAnswer implements Serializable{
 	 * Setter method to set the answer to the first question of the statistical answer related to a product done by a user
 	 * @param q1
 	 */
-	public void setQ1(int q1) {
+	public void setQ1(Integer q1) {
 		this.q1 = q1;
 	}
 
@@ -105,7 +105,7 @@ public class StatisticalAnswer implements Serializable{
 	 * Setter method to set the answer to the second question of the statistical answer related to a product done by a user
 	 * @param q2
 	 */
-	public void setQ2(int q2) {
+	public void setQ2(Integer q2) {
 		this.q2 = q2;
 	}
 
@@ -121,7 +121,7 @@ public class StatisticalAnswer implements Serializable{
 	 * Setter method to set the answer to the third question of the statistical answer related to a product done by a user
 	 * @param q3
 	 */
-	public void setQ3(int q3) {
+	public void setQ3(Integer q3) {
 		this.q3 = q3;
 	}
 

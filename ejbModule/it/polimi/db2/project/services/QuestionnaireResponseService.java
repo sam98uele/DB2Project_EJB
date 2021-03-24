@@ -206,7 +206,7 @@ public class QuestionnaireResponseService {
 		
 		// if no product of the day, cannot continue!
 		if (retrieved_products == null || retrieved_products.isEmpty() || retrieved_products.size() != 1) 
-			throw new NoProductOfTheDayException();
+			throw new NoProductOfTheDayException("There are no product for today");
 		
 		// else getting the product of the day
 		this.product = retrieved_products.get(0);

@@ -53,6 +53,7 @@ public class ProductUserService {
 		// if the product is not 1, then it means we do not have a product of the day to display
 		if(prodList == null || prodList.isEmpty() || prodList.size() != 1)
 			throw new NoProductOfTheDayException("The number of product of that day is not 1");
+		//TODO: check when there are no product of the day there is a null pointer exception in getReviewsOfTheProductOfTheDay
 		
 		// if here we are sure to have the product of the day "not null" and that is unique
 		//	thanks to the exceptions
