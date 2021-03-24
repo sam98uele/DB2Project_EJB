@@ -7,6 +7,7 @@ import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
+import javax.persistence.PersistenceException;
 
 import it.polimi.db2.project.entities.MarketingAnswer;
 import it.polimi.db2.project.entities.MarketingQuestion;
@@ -15,9 +16,11 @@ import it.polimi.db2.project.entities.Product;
 import it.polimi.db2.project.entities.QuestionnaireResponse;
 import it.polimi.db2.project.entities.StatisticalAnswer;
 import it.polimi.db2.project.entities.User;
+import it.polimi.db2.project.exceptions.ApplicationErrorException;
 import it.polimi.db2.project.exceptions.InvalidActionException;
 import it.polimi.db2.project.exceptions.InvalidAnswerException;
 import it.polimi.db2.project.exceptions.NoProductOfTheDayException;
+import it.polimi.db2.project.exceptions.QueryException;
 import it.polimi.db2.project.exceptions.ResponseException;
 
 /**
@@ -78,8 +81,6 @@ public class QuestionnaireResponseService {
 	public void goToStatisticalSection(List<MarketingAnswer> marketingAnswers) {
 		this.section = 1;
 		this.response.setMarketingAnswers(marketingAnswers);
-		for(int i = 0; i<marketingAnswers.size(); i++)
-			marketingAnswers.get(i).setQuestionnaireResponse(this.response);
 	}
 	
 	/**
@@ -90,7 +91,6 @@ public class QuestionnaireResponseService {
 	public void goToMarketingSection(StatisticalAnswer statisticalAnswer) {
 		this.section = 0;
 		this.response.setStatisticalAnswers(statisticalAnswer);
-		statisticalAnswer.setQuestionnaireResponse(this.response);
 	}
 	
 	/**
@@ -119,40 +119,35 @@ public class QuestionnaireResponseService {
 	 * 
 	 * @param statisticalAnswer the answer in the page!
 	 * @throws ResponseException if the response is not ready to be submitted
-	 * @throws InvalidAnswerException 
+	 * @throws InvalidAnswerException if there are some invalid answers
+	 * @throws ApplicationErrorException if there are problems with the query
 	 */
-	public void submit(StatisticalAnswer statisticalAnswer) throws ResponseException, InvalidAnswerException{
+	public void submit(StatisticalAnswer statisticalAnswer) throws ResponseException, InvalidAnswerException, ApplicationErrorException{
+		// adding the statistical answers to the response
 		this.response.setStatisticalAnswers(statisticalAnswer);
-		statisticalAnswer.setQuestionnaireResponse(this.response);
 		
+		// checking if no marketing answer submitted
 		if(this.response.getMarketingAnswers() == null || this.response.getMarketingAnswers().isEmpty() 
 				|| this.response.getMarketingAnswers().size() == 0)
 			throw new InvalidAnswerException("Marketing Answers are mandatory!");
+		
+		// checking if all marketing answer submitted only one time
+		for (MarketingQuestion markQuest : this.product.getMarketingQuestions()) {
+			int i = 0;
+			for (MarketingAnswer markAns: this.response.getMarketingAnswers()) {
+				if (markAns.getQuestion().getId() == markQuest.getId()
+						&& markAns.getAnswer() != null && !markAns.getAnswer().equals(""))
+					i++;
+			}
+			if(i != 1) // if not only one answer, throwing an exception
+				throw new InvalidAnswerException("Marketing Answers are mandatory!");
+		}
 		
 		// if the user has inserted a bad word
 		if(this.badWords()) {
 			this.user.setBlocked(true); // block the user
 			em.merge(this.user); // update the user
 			throw new ResponseException("You have inserted a bad word! You are blocked! You cannot fill any questionnaire anymore!");
-		}
-			
-		// checking if the marketing questions are all answered
-		for (MarketingQuestion marketingQuestion : this.product.getMarketingQuestions()) {
-			// TODO: FIX THE LAMBDA
-			//			TEMPORARILY I'VE PUTTED THE DOUBLE FOR CYCLE
-			//List<MarketingAnswer> m_a_r = this.response.getMarketingAnswers().stream()
-			//		.filter(a -> a.getQuestion().getId() == marketingQuestion.getId())
-			//		.collect(Collectors.toList());
-			//int size = m_a_r.size();
-			
-			int i = 0;
-			for(MarketingAnswer marketingAnswer : this.response.getMarketingAnswers()) {
-				if(marketingAnswer.getQuestion().getId() == marketingQuestion.getId())
-						i++;
-			}
-			
-			if(i != 1)
-				throw new InvalidAnswerException("The Marketing Answare are mandatory! You must submit all of them!");
 		}
 		
 		// setted as submitted
@@ -162,8 +157,15 @@ public class QuestionnaireResponseService {
 		//	and update the opposite
 		this.product.addQuestionnaireResponse(this.response);
 		
-		em.persist(this.response); //TODO: check if this could be avoided due to cascading!	
+		// persisting the response
+		try {
+			em.persist(this.response);
+		}
+		catch(PersistenceException | IllegalArgumentException e) {
+			throw new ApplicationErrorException("There are problems while inserting the answer!");
+		}
 		
+		// if all is fine, removing the response
 		this.response = null;
 	}
 	
@@ -172,8 +174,9 @@ public class QuestionnaireResponseService {
 	 * It will save the QuestionnaireResponse only,
 	 * 		 marked as submitted = 0 and completed = 1
 	 * The StatisticalAnswer(s) and the MarketingAnswer are lost.
+	 * @throws ApplicationErrorException if problems with the insertion
 	 */
-	public void cancel() {
+	public void cancel() throws ApplicationErrorException {
 		// cancelled, so answers to null
 		this.response.setMarketingAnswers(null);
 		this.response.setStatisticalAnswers(null);
@@ -186,8 +189,14 @@ public class QuestionnaireResponseService {
 		this.product.addQuestionnaireResponse(this.response);
 		
 		// persisting the response
-		em.persist(this.response);
+		try {			
+			em.persist(this.response);
+		}
+		catch(PersistenceException | IllegalArgumentException e) {
+			throw new ApplicationErrorException("There are problems while sending the performing the action!");
+		}
 		
+		// setting the response equal to null
 		this.response = null;
 	}
 	

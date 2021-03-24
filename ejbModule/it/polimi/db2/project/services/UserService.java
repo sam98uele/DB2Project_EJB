@@ -80,7 +80,7 @@ public class UserService {
 					.setParameter(1, username)
 					.setHint("javax.persistence.cache.storeMode", "REFRESH")
 					.getResultList();
-		} catch (PersistenceException e) {
+		} catch (IllegalArgumentException e) {
 			// if there are problems during the execution of the query,
 			// it is not user fault, so throw an exception
 			throw new ApplicationErrorException("Error while checking your credentials! Try again Later.");
@@ -136,13 +136,19 @@ public class UserService {
 	 */
 	public User registration(String username, String email, String password) throws RegistrationException {
 		// checking if the username is available
-		List<User> users_same_username = em.createQuery(
-				"SELECT r FROM User r WHERE r.username = ?1", 
-				User.class)
-				.setParameter(1, username)
-				.getResultList();
+		List<User> users_same_username;
+		try {
+			users_same_username = em.createQuery(
+					"SELECT r FROM User r WHERE r.username = ?1", 
+					User.class)
+					.setParameter(1, username)
+					.getResultList();
+		}
+		catch (IllegalArgumentException e) {
+			throw new RegistrationException("Cannot fullfil the request");
+		}
 		
-		if(users_same_username != null && users_same_username.isEmpty() && users_same_username.size() != 0)
+		if(users_same_username != null && !users_same_username.isEmpty() && users_same_username.size() != 0)
 			throw new RegistrationException("The Username is not available");
 		
 		String user_password;
@@ -153,13 +159,11 @@ public class UserService {
 			user_password = Base64.getEncoder().encodeToString(encoded_passoword);
 			user_salt = Base64.getEncoder().encodeToString(salt);
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			throw new RegistrationException("Error during registration - 01");
+			throw new RegistrationException("Error during registration - error code: registration-01");
 		}
 		
 		if(user_password == null || user_salt == null)
-			throw new RegistrationException("Error during registration - 02");
+			throw new RegistrationException("Error during registration - error code: registration-02");
 		
 		// if all ok, creating the user
 		// and persist it 
@@ -167,8 +171,8 @@ public class UserService {
 		try {
 			em.persist(user);
 		}
-		catch(PersistenceException e) {
-			throw new RegistrationException("Your Registration cannot be completed.");
+		catch(IllegalArgumentException | PersistenceException e) {
+			throw new RegistrationException("Your Registration cannot be completed. - error code: registration-03");
 		}
 		
 		// if all ok, returning the newly created user
@@ -180,11 +184,19 @@ public class UserService {
 	 * for this month or not.
 	 * @param user the user we want to know
 	 * @return true if already sumbitted, false otherwise
+	 * @throws ApplicationErrorException if there are problems with the request
 	 */
-	public boolean answeredToQuestionnaireOfTheDay(User user) {
+	public boolean answeredToQuestionnaireOfTheDay(User user) throws ApplicationErrorException {
 		// getting the product of the day
-		List<Product> retrieved_products = em.createNamedQuery("Product.getProductOfTheDayToday", Product.class)
-				.getResultList();
+		List<Product> retrieved_products;
+		try {
+			retrieved_products = em.createNamedQuery("Product.getProductOfTheDayToday", Product.class)
+					.getResultList();
+		}
+		catch (IllegalArgumentException e) {
+			throw new ApplicationErrorException("Cannot fullfil the request");
+		}
+		
 		
 		// if no product of the day, cannot continue!
 		if (retrieved_products == null || retrieved_products.isEmpty() || retrieved_products.size() != 1) 
@@ -194,12 +206,19 @@ public class UserService {
 		Product product = retrieved_products.get(0);
 		
 		// checking if already answered
-		List<QuestionnaireResponse> responses= em.createQuery(
-				"SELECT r FROM Product p JOIN p.questionnaireResponses r WHERE p.id = ?1 AND r.user.id = ?2", 
-				QuestionnaireResponse.class)
-				.setParameter(1, product.getId())
-				.setParameter(2, user.getId())
-				.getResultList();
+		List<QuestionnaireResponse> responses;
+		try {
+			responses = em.createQuery(
+					"SELECT r FROM Product p JOIN p.questionnaireResponses r WHERE p.id = ?1 AND r.user.id = ?2", 
+					QuestionnaireResponse.class)
+					.setParameter(1, product.getId())
+					.setParameter(2, user.getId())
+					.getResultList();
+		}
+		catch (IllegalArgumentException e) {
+			throw new ApplicationErrorException("Cannot fullfil the request");
+		}
+		
 		
 		if(responses != null && !responses.isEmpty() && responses.size() != 0)
 			return true;
@@ -225,7 +244,7 @@ public class UserService {
 					.setHint(QueryHints.REFRESH, HintValues.TRUE) // do not cache the results
 					.getResultList();
 		}
-		catch (PersistenceException e) {
+		catch (IllegalArgumentException e) {
 			throw new ApplicationErrorException("There was an error while serving your request!");
 		}
 		

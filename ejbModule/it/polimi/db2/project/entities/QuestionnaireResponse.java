@@ -169,10 +169,12 @@ public class QuestionnaireResponse implements Serializable{
 	/**
 	 * Setter method for setting the statistical answers (mandatory ones) of the user to the questionnaire relative to a specific
 	 * product.
+	 * It will also update the other hand of the relation
 	 * @param statisticalAnswers
 	 */
 	public void setStatisticalAnswers(StatisticalAnswer statisticalAnswers) {
 		this.statisticalAnswers = statisticalAnswers;
+		statisticalAnswers.setQuestionnaireResponse(this); // update the other part of the relation
 	}
 
 	/**
@@ -187,10 +189,13 @@ public class QuestionnaireResponse implements Serializable{
 	/**
 	 * Setter method for setting the marketing answers (changing for every product) of the user to the specific product 
 	 * questionnaire.
+	 * It will also update the other hand of the relation
 	 * @param marketingAnswers
 	 */
 	public void setMarketingAnswers(List<MarketingAnswer> marketingAnswers) {
 		this.marketingAnswers = marketingAnswers;
+		for(int i = 0; i<marketingAnswers.size(); i++)
+			marketingAnswers.get(i).setQuestionnaireResponse(this);
 	}
 	
 	/**
@@ -212,10 +217,13 @@ public class QuestionnaireResponse implements Serializable{
 	//---- ADDERS - REMOVERS----	
 	/**
 	 * Method used to add a marketing answer response to the list of marketing answer responses
+	 * It will update also the other hand of the relation
 	 * @param marketingAnswer
 	 */
 	public void addMarketingAnswers(MarketingAnswer marketingAnswer) {
 		getMarketingAnswers().add(marketingAnswer);
+		for(int i = 0; i<marketingAnswers.size(); i++)
+			marketingAnswers.get(i).setQuestionnaireResponse(this);
 	}
 	
 	/**
