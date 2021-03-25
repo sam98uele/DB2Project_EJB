@@ -67,7 +67,7 @@ public class QuestionnaireResponseService {
 	 */
 	public QuestionnaireResponseService() {
 		this.section = 0; // by default the user enters in the marketing section
-		this.response = new QuestionnaireResponse(); // this is the new questionnaire created
+		this.response = null; // init the response at null
 	}
 	
 	/**
@@ -209,6 +209,9 @@ public class QuestionnaireResponseService {
 	 * @throws InvalidActionException 
 	 */
 	public Product startQuestionnaire(User user) throws NoProductOfTheDayException, InvalidActionException {
+		// this is the new questionnaire created
+		this.response = new QuestionnaireResponse();
+		
 		// retrieving the product of the day
 		List<Product> retrieved_products = em.createNamedQuery("Product.getProductOfTheDayToday", Product.class)
 				.getResultList();
