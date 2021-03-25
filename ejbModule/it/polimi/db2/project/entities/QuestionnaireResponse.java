@@ -251,20 +251,16 @@ public class QuestionnaireResponse implements Serializable{
 		}
 	}
 	
+	/**
+	 * This will return the marketing answers ordered by the Order of the marketing question
+	 * decided by the Admin when inserting the Question
+	 * 
+	 * @return the list of marketing answers ordered by question order
+	 */
 	public List<MarketingAnswer> getOrderedMarketingAnswers(){
-//		return this.marketingAnswers.stream()
-//				.sorted((a1, a2) -> Integer.compare(a1.getQuestion().getOrdering(), a2.getQuestion().getOrdering()))
-//				.collect(Collectors.toList());
 		List<MarketingAnswer> ma = new IndirectList<>(this.marketingAnswers);
-//		Collections.sort(ma, new CompareMarketingAnswer());
-//		ma.sort(new CompareMarketingAnswer());
-		
-		
-	    Object sortTargetObject = ((IndirectCollection) ma).getDelegateObject();
-	    if (sortTargetObject instanceof List<?>) {
-	        List<MarketingAnswer> sortTarget= (List<MarketingAnswer>) sortTargetObject;
-	        Collections.sort(sortTarget,new CompareMarketingAnswer());
-	    }
+
+		ma.sort(new CompareMarketingAnswer());
 	    
 	    return ma;
 	}
