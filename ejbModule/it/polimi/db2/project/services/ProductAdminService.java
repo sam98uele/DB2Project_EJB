@@ -68,7 +68,7 @@ public class ProductAdminService {
 		if(dateCompRes < 0)
 			throw new InvalidInputArgumentException("The inserted date is before the current date! You can insert only product in a date equalt to today or a future date!");
 		
-		// TODO: THE DATE DOES NOT WORK PROPERLY
+		// TODO TO RELEASE: mark in comments or presentation the time problems we have faces, plus remove unused imports
 //		java.sql.Date dateSQL = new java.sql.Date(date.getTime());
 		
 //		System.out.print(date.toString());
@@ -90,13 +90,6 @@ public class ProductAdminService {
 		this.product = product;
 
 		return product;
-		
-		// TODO: this is a test method. Many things can be messing. 
-		//	so, need to check, the following my notes (@samuele): 
-		//		to implement
-		//			only admin can do this, THE CHECK MUST BE DONE IN THE FRONTEND
-		//			remember this can be added only in a future day or today
-		//			if a product with the same date, it is a problem
 	}
 	
 	/**
