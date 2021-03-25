@@ -257,14 +257,14 @@ public class QuestionnaireResponse implements Serializable{
 //				.collect(Collectors.toList());
 		List<MarketingAnswer> ma = new IndirectList<>(this.marketingAnswers);
 //		Collections.sort(ma, new CompareMarketingAnswer());
-//		ma.sort(new CompareMarketingAnswer());
+		ma.sort(new CompareMarketingAnswer());
 		
 		
-	    Object sortTargetObject = ((IndirectCollection) ma).getDelegateObject();
-	    if (sortTargetObject instanceof List<?>) {
-	        List<MarketingAnswer> sortTarget= (List<MarketingAnswer>) sortTargetObject;
-	        Collections.sort(sortTarget,new CompareMarketingAnswer());
-	    }
+//	    Object sortTargetObject = ((IndirectCollection) ma).getDelegateObject();
+//	    if (sortTargetObject instanceof List<?>) {
+//	        List<MarketingAnswer> sortTarget= (List<MarketingAnswer>) sortTargetObject;
+//	        Collections.sort(sortTarget,new CompareMarketingAnswer());
+//	    }
 	    
 	    return ma;
 	}
