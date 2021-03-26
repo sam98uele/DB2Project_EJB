@@ -1,15 +1,9 @@
 package it.polimi.db2.project.entities;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-
 import javax.persistence.*;
-
-import org.eclipse.persistence.indirection.IndirectCollection;
 import org.eclipse.persistence.indirection.IndirectList;
-
 import it.polimi.db2.project.comparator.CompareMarketingAnswer;
 
 /**
