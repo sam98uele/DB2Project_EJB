@@ -20,7 +20,6 @@ import it.polimi.db2.project.exceptions.ApplicationErrorException;
 import it.polimi.db2.project.exceptions.InvalidActionException;
 import it.polimi.db2.project.exceptions.InvalidAnswerException;
 import it.polimi.db2.project.exceptions.NoProductOfTheDayException;
-import it.polimi.db2.project.exceptions.QueryException;
 import it.polimi.db2.project.exceptions.ResponseException;
 
 /**
@@ -98,9 +97,11 @@ public class QuestionnaireResponseService {
 	 * @return true if there are bad words, false otherwise
 	 */
 	private boolean badWords() {
-		// TODO: to implement the remove of ? and ! etc to keep only words and not symbols
 		for (MarketingAnswer marketingAnswer : this.response.getMarketingAnswers()) {
-			String[] words = marketingAnswer.getAnswer().split(" ");
+			//before splitting the string we need to remove special characters
+			String[] words = marketingAnswer.getAnswer()
+					.replaceAll("][#)(@><-_:;\'/°|?^!\"$\\}{=&%£€","")
+					.split(" ");
 			for(String word: words) {
 				List<Offensive> offensive = em.createNamedQuery("Offensive.searchBadWord", Offensive.class)
 						.setParameter(1, word).getResultList();

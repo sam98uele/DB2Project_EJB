@@ -6,27 +6,19 @@ import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-
-import org.eclipse.persistence.config.CacheUsage;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
-
 import it.polimi.db2.project.entities.Log;
 import it.polimi.db2.project.entities.Product;
 import it.polimi.db2.project.entities.QuestionnaireResponse;
 import it.polimi.db2.project.entities.User;
 import it.polimi.db2.project.exceptions.ApplicationErrorException;
 import it.polimi.db2.project.exceptions.CredentialsException;
-import it.polimi.db2.project.exceptions.InvalidActionException;
-import it.polimi.db2.project.exceptions.NoProductOfTheDayException;
 import it.polimi.db2.project.exceptions.RegistrationException;
-
-import it.polimi.db2.project.services.PasswordEncryptionService;
 
 /**
  * This is the service class for the user.
@@ -49,19 +41,6 @@ public class UserService {
 		// Default Constructor
 	}
 	
-	/**
-	 * This will return if the user is admin or not
-	 * 
-	 * @param userId the Id of the user
-	 * @return a boolean denoted the status of being admin or not
-	 */
-	public Boolean isAdmin(String userId) {
-		// TODO: is it necessary?
-		//			because we have the User object in the frontend.
-		User user = em.find(User.class, userId);
-		
-		return user.isAdmin();
-	}
 	
 	/**
 	 * This will check the credentials for the login of the user.
@@ -101,8 +80,6 @@ public class UserService {
 						Base64.getDecoder().decode(user.getSalt())))
 					throw new CredentialsException("Error! Username or Password is wrong!");
 			} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 				throw new CredentialsException("Couldn't perform the login!");
 			}
 			

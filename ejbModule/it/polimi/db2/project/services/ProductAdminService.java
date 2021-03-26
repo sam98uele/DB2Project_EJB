@@ -3,16 +3,12 @@ package it.polimi.db2.project.services;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.ejb.Remove;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.persistence.PersistenceException;
-import javax.persistence.TemporalType;
-
 import org.joda.time.DateTimeComparator;
 
 import it.polimi.db2.project.entities.MarketingQuestion;
