@@ -22,8 +22,6 @@ import it.polimi.db2.project.exceptions.RegistrationException;
 
 /**
  * This is the service class for the user.
- * 
- * @author Samuele
  *
  */
 @Stateless

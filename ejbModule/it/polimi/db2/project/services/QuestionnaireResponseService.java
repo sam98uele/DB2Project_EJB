@@ -26,8 +26,6 @@ import it.polimi.db2.project.exceptions.ResponseException;
  * Stateful EJB for the Questionnaire Response
  * It is needed to be Stateful because it needs to remember the answer until a Submit or 
  * 		a Cancel action is performed!
- * 
- * @author Samuele
  *
  */
 @Stateful

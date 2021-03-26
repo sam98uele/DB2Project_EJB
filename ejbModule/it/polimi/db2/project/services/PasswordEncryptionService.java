@@ -11,8 +11,6 @@ import javax.crypto.spec.PBEKeySpec;
 
 /**
  * This class will manage the Encryption operations of the passwords
- * 
- * @author Samuele
  *
  */
 public class PasswordEncryptionService {
