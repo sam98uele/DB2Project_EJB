@@ -22,7 +22,7 @@ import it.polimi.db2.project.comparator.CompareMarketingAnswer;
 						+ "r.submitted = :submitted"),
 	@NamedQuery(name = "QuestionnaireResponse.RetrieveSpecificQuestionnaire",
 		query = "SELECT r FROM QuestionnaireResponse r WHERE r.user.id = :userID and r.product.id = :productID")
-	})
+})
 public class QuestionnaireResponse implements Serializable{
 	
 	/**

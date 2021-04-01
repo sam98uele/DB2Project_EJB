@@ -3,9 +3,9 @@ package it.polimi.db2.project.entities;
 import java.io.Serializable;
 
 import javax.persistence.*;
+
 /**
  * Entity class for the table "offensive", containing offensive words/expressions
- * @author lucaa
  *
  */
 @Entity

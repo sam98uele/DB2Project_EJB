@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 			@NamedQuery(name = "User.getUserByUsername", query = "SELECT r FROM User r  WHERE r.username = ?1")
 		}
 )
-
 public class User implements Serializable{
 	
 	//----ATTRIBUTES----

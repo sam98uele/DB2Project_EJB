@@ -2,7 +2,6 @@ package it.polimi.db2.project.exceptions;
 
 /**
  * Thrown when there are errors during registration phase
- * @author Samuele
  *
  */
 public class RegistrationException extends Exception {

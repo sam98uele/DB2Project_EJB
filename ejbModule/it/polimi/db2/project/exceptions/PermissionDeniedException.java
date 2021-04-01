@@ -3,8 +3,6 @@ package it.polimi.db2.project.exceptions;
 /**
  * It is Raised if a user tries to do an action it is not allowed to do
  * for example a not-admin user tries to create a product (only admins can do it)
- * 
- * @author Samuele
  *
  */
 public class PermissionDeniedException extends Exception{

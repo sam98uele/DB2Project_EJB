@@ -2,8 +2,6 @@ package it.polimi.db2.project.exceptions;
 
 /**
  * This is the exceptions during the compilation of the response
- * 
- * @author Samuele
  *
  */
 public class ResponseException extends Exception {

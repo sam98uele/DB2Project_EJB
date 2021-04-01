@@ -10,6 +10,12 @@ import it.polimi.db2.project.entities.QuestionnaireResponse;
 import it.polimi.db2.project.exceptions.NoProductOfTheDayException;
 import it.polimi.db2.project.exceptions.QueryException;
 
+/**
+ * 
+ * This class will provide a service for the actions on Product
+ * done by users.
+ *
+ */
 @Stateless
 public class ProductUserService {
 	/**
