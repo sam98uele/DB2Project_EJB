@@ -19,6 +19,7 @@ import it.polimi.db2.project.entities.User;
 import it.polimi.db2.project.exceptions.ApplicationErrorException;
 import it.polimi.db2.project.exceptions.CredentialsException;
 import it.polimi.db2.project.exceptions.RegistrationException;
+import it.polimi.db2.project.util.PasswordEncryption;
 
 /**
  * This is the service class for the user.
@@ -72,7 +73,7 @@ public class UserService {
 			User user = uList.get(0);
 			
 			try {
-				if(!PasswordEncryptionService.authenticate(
+				if(!PasswordEncryption.authenticate(
 						password, 
 						Base64.getDecoder().decode(user.getPassword()), 
 						Base64.getDecoder().decode(user.getSalt())))
@@ -129,8 +130,8 @@ public class UserService {
 		String user_password;
 		String user_salt;
 		try {
-			byte[] salt = PasswordEncryptionService.generateSalt();
-			byte[] encoded_passoword = PasswordEncryptionService.getEncryptedPassword(password, salt);
+			byte[] salt = PasswordEncryption.generateSalt();
+			byte[] encoded_passoword = PasswordEncryption.getEncryptedPassword(password, salt);
 			user_password = Base64.getEncoder().encodeToString(encoded_passoword);
 			user_salt = Base64.getEncoder().encodeToString(salt);
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e1) {

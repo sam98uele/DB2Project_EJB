@@ -1,4 +1,4 @@
-package it.polimi.db2.project.services;
+package it.polimi.db2.project.util;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -13,7 +13,7 @@ import javax.crypto.spec.PBEKeySpec;
  * This class will manage the Encryption operations of the passwords
  *
  */
-public class PasswordEncryptionService {
+public class PasswordEncryption {
 	/**
 	 * This is called to 
 	 * 
