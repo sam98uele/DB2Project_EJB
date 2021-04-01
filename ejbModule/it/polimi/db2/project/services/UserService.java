@@ -69,7 +69,9 @@ public class UserService {
 		if (uList.isEmpty())
 			throw new CredentialsException("Error! Username or Password is wrong!");
 		else if (uList.size() == 1) {
-			// getting the user object
+			/**
+			 * getting the user object
+			 */
 			User user = uList.get(0);
 			
 			try {
@@ -82,14 +84,22 @@ public class UserService {
 				throw new CredentialsException("Couldn't perform the login!");
 			}
 			
-			// saving in the logs the that the user logged in
+			/**
+			 * saving in the logs the that the user logged in
+			 */
 			Date date = Calendar.getInstance().getTime();
 			Log log = new Log(date, user);
-			em.persist(log);
+			try {
+				em.persist(log);
+			}
+			catch(IllegalArgumentException | PersistenceException e) {
+				throw new ApplicationErrorException("Could not login because of an Application Error");
+			}
+			
 			
 			// returning the user to the frontend
 			//	no matter for the password, given that is the password of the user
-			return uList.get(0); // there exists one user associated to the data
+			return user; // there exists one user associated to the data
 		}
 		
 		// if more users are present, then it's a problem.
@@ -163,7 +173,9 @@ public class UserService {
 	 * @throws ApplicationErrorException if there are problems with the request
 	 */
 	public boolean answeredToQuestionnaireOfTheDay(User user) throws ApplicationErrorException {
-		// getting the product of the day
+		/**
+		 * getting the product of the day
+		 */
 		List<Product> retrieved_products;
 		try {
 			retrieved_products = em.createNamedQuery("Product.getProductOfTheDayToday", Product.class)
@@ -173,15 +185,17 @@ public class UserService {
 			throw new ApplicationErrorException("Cannot fullfil the request");
 		}
 		
-		
 		// if no product of the day, cannot continue!
 		if (retrieved_products == null || retrieved_products.isEmpty() || retrieved_products.size() != 1) 
 				return false;
 		
+		
 		// this is the product of the day
 		Product product = retrieved_products.get(0);
 		
-		// checking if already answered
+		/**
+		 * checking if already answered
+		 */
 		List<QuestionnaireResponse> responses;
 		try {
 			responses = em.createQuery(
@@ -195,10 +209,11 @@ public class UserService {
 			throw new ApplicationErrorException("Cannot fullfil the request");
 		}
 		
-		
+		// if we find responses
 		if(responses != null && !responses.isEmpty() && responses.size() != 0)
 			return true;
 		
+		// no responses found
 		return false;
 	}
 	
@@ -211,6 +226,7 @@ public class UserService {
 	 */
 	public List<User> getLeaderboard() throws ApplicationErrorException {
 		List<User> l_users = null;
+		
 		try {
 			l_users = em.createQuery(
 					"SELECT u FROM User u WHERE u.isAdmin != true"

@@ -12,9 +12,9 @@ import org.joda.time.DateTimeComparator;
 import it.polimi.db2.project.entities.Product;
 import it.polimi.db2.project.entities.QuestionnaireResponse;
 import it.polimi.db2.project.entities.User;
+import it.polimi.db2.project.exceptions.ApplicationErrorException;
 import it.polimi.db2.project.exceptions.InvalidActionException;
 import it.polimi.db2.project.exceptions.ProductException;
-import it.polimi.db2.project.exceptions.QueryException;
 
 /**
  * 
@@ -54,7 +54,6 @@ public class QuestionnaireAdminService {
 		Product p = null;
 		
 		try {
-			
 			p = em.find(Product.class, productId);
 		}catch(IllegalArgumentException e) {
 			//e.printStackTrace();
@@ -121,9 +120,9 @@ public class QuestionnaireAdminService {
 	 * @param subOrCanc is a boolean needed in order to know which users return: the ones who cancelled the questionnaire, or the 
 	 * ones who submitted it
 	 * @return a list of User type MAY BE NULL
-	 * @throws QueryException when unable to perform the named query
+	 * @throws ApplicationErrorException when unable to perform the named query
 	 */
-	public List<User> getListUserCompiledQuestionnaire(Integer productID, boolean subOrCanc) throws QueryException{
+	public List<User> getListUserCompiledQuestionnaire(Integer productID, boolean subOrCanc) throws ApplicationErrorException{
 		
 		/**
 		 * Initializing a temporary list of users.
@@ -147,10 +146,9 @@ public class QuestionnaireAdminService {
 					.setParameter("submitted", subOrCanc)
 					.getResultList();
 			
-		}catch(IllegalStateException | PersistenceException e) {
-			
-			e.printStackTrace();
-			throw new QueryException("Unable to return the users who compiled the questionnaire of the product with id = "+
+		}catch(IllegalArgumentException e) {
+			// e.printStackTrace();
+			throw new ApplicationErrorException("Unable to return the users who compiled the questionnaire of the product with id = "+
 					productID +" and parameter submitted = "+ String.valueOf(subOrCanc) );
 		}
 		
@@ -169,10 +167,10 @@ public class QuestionnaireAdminService {
 	 * @return return the questionnaire response submitted by the user about the specific product, it can be either submitted 
 	 * or cancelled, this is not filtered looking at the parameter "submitted". The returned object could be null if the user did 
 	 * not answered the questionnaire relative to a specific product
-	 * @throws QueryException if unable to retrieve questionnaire answered by a specific user while calling the named query or if
-	 * the questionnaire response is multiple: you could not have more than one answer per user to a product
+	 * @throws ApplicationErrorException if unable to retrieve questionnaire answered by a specific user while calling the named query or if
+	 * the questionnaire response is multiple: you cannot have more than one answer per user to a product
 	 */
-	public QuestionnaireResponse getAllQuestionnaireAnsweredBySpecificUserAndProduct(Integer userID, Integer productID) throws QueryException {
+	public QuestionnaireResponse getAllQuestionnaireAnsweredBySpecificUserAndProduct(Integer userID, Integer productID) throws ApplicationErrorException {
 		
 		/**
 		 * Initializing a temporary list. This list will be filled by the query
@@ -200,44 +198,38 @@ public class QuestionnaireAdminService {
 					.setParameter("productID", productID)
 					.getResultList();
 			
-		}catch(IllegalStateException | PersistenceException e) {
-			
+		}catch(IllegalArgumentException e) {
 			// e.printStackTrace();
-			throw new QueryException("Unable to return questionnaire responded by user with id = "+userID+" and about the "
+			throw new ApplicationErrorException("Unable to return questionnaire responded by user with id = "+userID+" and about the "
 					+ "product with id ="+productID);
 			
 		}
 		
+		if(responses.size() > 1) {
+			/**
+			 * If I am here, I got more than one element. This should not have happened
+			 */
+			throw new ApplicationErrorException("There is more than one element satisfying the query with parameters userID = "
+					+userID+" and productID = "+productID+".\n This should not happen: a person should be able to answer only\n"+
+					"a questionnaire relative to a product (either none)");
+		}
 		
 		/**
 		 * Returning the response: if the method found more than a result, something went wrong, otherwise we can return the first 
 		 * element of the list. This check is performed in order to ensure that the inserting part went well
 		 */
-		if(responses.size()<=1) {
+		if(responses == null || responses.isEmpty() || responses.size()==0) {
 			/**
-			 * If I am here, then I got only one element or no one
+			 * If I am here, the list is empty, so I directly return the "response element" as initialized, which is null
 			 */
-			if(responses.isEmpty() || responses.size()==0) {
-				
-				/**
-				 * If I am here, the list is empty, so I directly return the "response element" as initialized, which is null
-				 */
-				return response;
-			}else {
-				/**
-				 * If I am here, I got only one element, i return that one
-				 */
-				response = responses.get(0);
-				return response;
-			}
-		}else {
-			/**
-			 * If I am here, I got more than one element. This should not have happened
-			 */
-			throw new QueryException("There is more than one element satisfying the query with parameters userID = "
-					+userID+" and productID = "+productID+".\n This should not happen: a person should be able to answer only\n"+
-					"a questionnaire relative to a product (either none)");
+			return response;
 		}
+		
+		/**
+		 * If I am here, I got only one element, i return that one
+		 */
+		response = responses.get(0);
+		return response;
 	}
-	
+
 }

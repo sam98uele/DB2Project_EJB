@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.persistence.PersistenceException;
+import javax.persistence.TransactionRequiredException;
 
 import it.polimi.db2.project.entities.MarketingAnswer;
 import it.polimi.db2.project.entities.MarketingQuestion;
@@ -95,19 +96,43 @@ public class QuestionnaireResponseService {
 	 * @return true if there are bad words, false otherwise
 	 */
 	private boolean badWords() {
+		// cycling for all the marketing answers
 		for (MarketingAnswer marketingAnswer : this.response.getMarketingAnswers()) {
-			//before splitting the string we need to remove special characters
+			/*
+			 * Removing not letters
+			 * putting all to lower case
+			 * splitting in " " the answer
+			 */
 			String[] words = marketingAnswer.getAnswer()
 					.replaceAll("[^a-zA-Z]+"," ") // replace not words sequences with space
 					.toLowerCase()
 					.split(" ");
+			
+			// for all the words in the answer
 			for(String word: words) {
-				List<Offensive> offensive = em.createNamedQuery("Offensive.searchBadWord", Offensive.class)
-						.setParameter(1, word).getResultList();
+				// checking if that word is an offensive one
+				List<Offensive> offensive;
+				try {
+					offensive = em.createNamedQuery("Offensive.searchBadWord", Offensive.class)
+							.setParameter(1, word).getResultList();
+				}
+				catch(IllegalArgumentException e) {
+					// if problems
+					// logging the problem in console
+					System.out.println("Error while checking bad words!");
+					// continue the cycle
+					continue;
+				}
+				
+				// if we have metched a bad word, returning true
 				if(offensive.size() != 0)
 					return true;
 			}
 		}
+		
+		/**
+		 * if we arrive here it means no bad words have been found
+		 */
 		return false;
 	}
 	
@@ -131,22 +156,42 @@ public class QuestionnaireResponseService {
 				|| this.response.getMarketingAnswers().size() == 0)
 			throw new InvalidAnswerException("Marketing Answers are mandatory!");
 		
-		// checking if all marketing answer submitted only one time
+		/**
+		 *  checking if all marketing answer submitted only one time
+		 */
+		// for all the question
 		for (MarketingQuestion markQuest : this.product.getMarketingQuestions()) {
-			int i = 0;
+			int i = 0; // setting the counter to 0
+			
+			// for all the answers
 			for (MarketingAnswer markAns: this.response.getMarketingAnswers()) {
+				// if there is a not null answer
 				if (markAns.getQuestion().getId() == markQuest.getId()
 						&& markAns.getAnswer() != null && !markAns.getAnswer().equals(""))
-					i++;
+					i++; // incrementing the counter
 			}
+			
 			if(i != 1) // if not only one answer, throwing an exception
 				throw new InvalidAnswerException("Marketing Answers are mandatory!");
 		}
 		
-		// if the user has inserted a bad word
-		if(this.badWords()) {
-			this.user.setBlocked(true); // block the user
-			em.merge(this.user); // update the user
+		/**
+		 * Checking bad words
+		 */
+		if(this.badWords()) { // if we found bad words
+			// block the user
+			this.user.setBlocked(true); // update the user to blocked
+			
+			try {	
+				// update the user
+				em.merge(this.user); 
+			}
+			catch (IllegalArgumentException | PersistenceException e) {
+				throw new ApplicationErrorException("Could not complete your request because of an application error!");
+			}
+			
+			// block here the process.
+			// and notify the user
 			throw new ResponseException("You have inserted a bad word! You are blocked! You cannot fill any questionnaire anymore!");
 		}
 		
@@ -205,16 +250,23 @@ public class QuestionnaireResponseService {
 	 * note: if no product of the day, an error is thrown
 	 * 
 	 * @param userId the Id of the user
-	 * @throws NoProductOfTheDayException 
-	 * @throws InvalidActionException 
+	 * @throws NoProductOfTheDayException if there are no product of the day today
+	 * @throws InvalidActionException if the user is performing an invalid action
+	 * @throws ApplicationErrorException if there are problems in the application
 	 */
-	public Product startQuestionnaire(User user) throws NoProductOfTheDayException, InvalidActionException {
+	public Product startQuestionnaire(User user) throws NoProductOfTheDayException, InvalidActionException, ApplicationErrorException {
 		// this is the new questionnaire created
 		this.response = new QuestionnaireResponse();
 		
 		// retrieving the product of the day
-		List<Product> retrieved_products = em.createNamedQuery("Product.getProductOfTheDayToday", Product.class)
-				.getResultList();
+		List<Product> retrieved_products;
+		try {
+			retrieved_products = em.createNamedQuery("Product.getProductOfTheDayToday", Product.class)
+					.getResultList();
+		}
+		catch(IllegalArgumentException e) {
+			throw new ApplicationErrorException("We are unable to serve your reqyest because of an application problem");
+		}
 		
 		// if no product of the day, cannot continue!
 		if (retrieved_products == null || retrieved_products.isEmpty() || retrieved_products.size() != 1) 
@@ -224,12 +276,18 @@ public class QuestionnaireResponseService {
 		this.product = retrieved_products.get(0);
 		
 		// checking if already answered
-		List<QuestionnaireResponse> responses= em.createQuery(
-				"SELECT r FROM Product p JOIN p.questionnaireResponses r WHERE p.id = ?1 AND r.user.id = ?2", 
-				QuestionnaireResponse.class)
-				.setParameter(1, this.product.getId())
-				.setParameter(2, user.getId())
-				.getResultList();
+		List<QuestionnaireResponse> responses;
+		try {
+			responses = em.createQuery(
+					"SELECT r FROM Product p JOIN p.questionnaireResponses r WHERE p.id = ?1 AND r.user.id = ?2", 
+					QuestionnaireResponse.class)
+					.setParameter(1, this.product.getId())
+					.setParameter(2, user.getId())
+					.getResultList();
+		}
+		catch(IllegalArgumentException e) {
+			throw new ApplicationErrorException("We are unable to serve your reqyest because of an application problem");
+		}
 		
 		if(responses != null && !responses.isEmpty() && responses.size() != 0)
 			throw new InvalidActionException("You cannot submit the questionnaire two times! Wait next day!");

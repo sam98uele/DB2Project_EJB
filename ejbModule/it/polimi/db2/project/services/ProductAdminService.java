@@ -13,6 +13,7 @@ import org.joda.time.DateTimeComparator;
 
 import it.polimi.db2.project.entities.MarketingQuestion;
 import it.polimi.db2.project.entities.Product;
+import it.polimi.db2.project.exceptions.ApplicationErrorException;
 import it.polimi.db2.project.exceptions.InvalidActionException;
 import it.polimi.db2.project.exceptions.InvalidInputArgumentException;
 import it.polimi.db2.project.exceptions.PermissionDeniedException;
@@ -53,8 +54,9 @@ public class ProductAdminService {
 	 * @throws ProductException if there are problems with the insertion of the product
 	 * @throws InvalidInputArgumentException if an invalid argument is passed to the method
 	 * @throws PermissionDeniedException if user performing the action is not allowed to do so
+	 * @throws ApplicationErrorException if there are problems in serving the request
 	 */
-	public Product addProduct(String name, byte[] img,  Date date, String description) throws ProductException, InvalidInputArgumentException, PermissionDeniedException{
+	public Product addProduct(String name, byte[] img,  Date date, String description) throws ProductException, InvalidInputArgumentException, PermissionDeniedException, ApplicationErrorException{
 		// today's date
 		Date todayDate = Calendar.getInstance().getTime();
 		
@@ -70,12 +72,20 @@ public class ProductAdminService {
 //		System.out.print(date.toString());
 		
 		// getting the product of the day of the day specified for that product
-		List<Product> prodDay = em.createNamedQuery("Product.getProductOfTheDay", Product.class)
-				.setParameter("date", date) // , TemporalType.DATE
-				.getResultList();
+		List<Product> prodDay = null;
+		try {
+			prodDay = em.createNamedQuery("Product.getProductOfTheDay", Product.class)
+					.setParameter("date", date) // , TemporalType.DATE
+					.getResultList();
+		}
+		catch(IllegalArgumentException e) {
+			// if we comes here it means there is a problem with the application
+			throw new ApplicationErrorException("There is a problem when serving your request. Please retry later.");
+			
+		}
 		
 		// if there are products of the day available, then it's not possible to add a new one for that day!
-		if(prodDay.size() != 0)
+		if(prodDay == null || prodDay.size() != 0)
 			throw new ProductException("In the specified day there already exists a product! Cannot insert an other one!");
 		
 		//Date dateAA = Calendar.getInstance().getTime();

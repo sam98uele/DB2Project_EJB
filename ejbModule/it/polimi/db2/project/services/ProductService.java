@@ -10,8 +10,8 @@ import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 
 import it.polimi.db2.project.entities.Product;
+import it.polimi.db2.project.exceptions.ApplicationErrorException;
 import it.polimi.db2.project.exceptions.ProductException;
-import it.polimi.db2.project.exceptions.QueryException;
 
 /**
  * This is the basic service to interact with the product.
@@ -50,8 +50,9 @@ public class ProductService {
 	 * This method will return list of past schedule of the product of the day.
 	 * Date will be less than current date.
 	 * @return list of product scheduled in the past (N.B.: check the list because could be null if there are no past schedule)
+	 * @throws ApplicationErrorException if there are problems retrieving the products
 	 */
-	public List<Product> getPastScheduledProductOfTheDay() throws QueryException{
+	public List<Product> getPastScheduledProductOfTheDay() throws ApplicationErrorException{
 		
 		/**
 		 * Initializing list of product of the day
@@ -67,8 +68,8 @@ public class ProductService {
 					.setHint(QueryHints.REFRESH, HintValues.TRUE) // do not cache the results
 					.getResultList();
 		}catch(IllegalStateException | PersistenceException e) {
-			e.printStackTrace();
-			throw new QueryException("Unable to retrieve past product of the day");
+			//e.printStackTrace();
+			throw new ApplicationErrorException("Unable to retrieve past product of the day");
 		}
 		/**
 		 * Returning product of the day
