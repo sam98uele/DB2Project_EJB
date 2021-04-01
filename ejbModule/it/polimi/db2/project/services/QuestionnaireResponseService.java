@@ -98,7 +98,8 @@ public class QuestionnaireResponseService {
 		for (MarketingAnswer marketingAnswer : this.response.getMarketingAnswers()) {
 			//before splitting the string we need to remove special characters
 			String[] words = marketingAnswer.getAnswer()
-					.replaceAll("][#)(@><-_:;\'/°|?^!\"$\\}{=&%£€","")
+					.replaceAll("[^a-zA-Z]+"," ") // replace not words sequences with space
+					.toLowerCase()
 					.split(" ");
 			for(String word: words) {
 				List<Offensive> offensive = em.createNamedQuery("Offensive.searchBadWord", Offensive.class)
