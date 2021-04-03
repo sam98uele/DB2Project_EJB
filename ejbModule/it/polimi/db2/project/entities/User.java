@@ -94,7 +94,7 @@ public class User implements Serializable{
 	@Column(nullable = false)
 	private boolean blocked;
 
-	//----RELATIONS----
+	//----RELATIONSHIPS----
 	/**
 	 * Relation with table "log": a user perform many logs. 1 user, many logs. Since entity "Log" has the FK (foreign key), this 
 	 * entity is NOT the owner of the relationship. Fetch type between user and log is set to Lazy, because since a User is supposed 
@@ -280,6 +280,11 @@ public class User implements Serializable{
 	 * @param logs
 	 */
 	public void setLogs(List<Log> logs) {
+		if( (logs != null) && (!logs.isEmpty()) ) { // if the list of logs is not null
+			for(Log i: logs) {
+				i.setUser(this); //updating the counterpart
+			}
+		}
 		this.logs = logs;
 	}
 	
@@ -311,6 +316,11 @@ public class User implements Serializable{
 	 * @param questionnaireResponses
 	 */
 	public void setQuestionnaireResponses(List<QuestionnaireResponse> questionnaireResponses) {
+		if((questionnaireResponses != null) && (!questionnaireResponses.isEmpty()) ) {  //if the list I'm setting is not null
+			for(QuestionnaireResponse i: questionnaireResponses) {
+				i.setUser(this); //updating the counterpart
+			}
+		}
 		this.questionnaireResponses = questionnaireResponses;
 	}
 	
@@ -321,6 +331,7 @@ public class User implements Serializable{
 	 * @param response
 	 */
 	public void addQuestionnaireResponse(QuestionnaireResponse response) {
+		response.setUser(this); //updating the counterpart
 		getQuestionnaireResponses().add(response);
 	}
 	
@@ -337,6 +348,7 @@ public class User implements Serializable{
 	 * @param log
 	 */
 	public void addLog(Log log){
+		log.setUser(this); //updating the counterpart
 		getLogs().add(log);
 	}
 	

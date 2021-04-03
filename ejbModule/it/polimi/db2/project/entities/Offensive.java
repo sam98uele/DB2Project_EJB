@@ -32,7 +32,7 @@ public class Offensive implements Serializable{
 	@Column(columnDefinition = "varchar(45)", nullable = false)
 	private String word;
 	
-	//----RELATIONS----
+	//----RELATIONSHIPS----
 	
 	/**
 	 * none

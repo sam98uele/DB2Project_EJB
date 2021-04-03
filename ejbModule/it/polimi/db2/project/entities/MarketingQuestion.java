@@ -43,7 +43,7 @@ public class MarketingQuestion implements Serializable{
 	@Column(columnDefinition = "varchar(200)", nullable = false)
 	private String question;
 	
-	//----RELATIONS----
+	//----RELATIONSHIPS----
 	
 	/**
 	 * Relationship with table "marketing_answer": to one questions, belongs many answers, one per user who responded. This is a 
@@ -137,6 +137,11 @@ public class MarketingQuestion implements Serializable{
 	 * @param answers
 	 */
 	public void setMarketingAnswers(List<MarketingAnswer> marketingAnswers) {
+		if((marketingAnswers != null) && (!marketingAnswers.isEmpty())) { //if I'm not setting an empty list
+			for (MarketingAnswer i : marketingAnswers) {
+				i.setQuestion(this); //updating the counterpart of the relationships
+			}
+		}
 		this.marketingAnswers = marketingAnswers;
 	}
 
@@ -162,6 +167,7 @@ public class MarketingQuestion implements Serializable{
 	 * Method used to add a marketing answer to the list of marketing answers
 	 */
 	public void addMarketingAnswer(MarketingAnswer marketingAnswer) {
+		marketingAnswer.setQuestion(this); //updating the counterpart of the relationship
 		getMarketingAnswers().add(marketingAnswer);
 	}
 	

@@ -33,7 +33,7 @@ public class MarketingAnswer implements Serializable{
 	@Column(columnDefinition = "varchar(200)", nullable = false)
 	private String answer;
 	
-	//----RELATIONS----
+	//----RELATIONSHIPS----
 	
 	/**
 	 * Relationship with "questionnaire_response table":

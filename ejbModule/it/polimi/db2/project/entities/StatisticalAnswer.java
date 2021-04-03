@@ -42,7 +42,7 @@ public class StatisticalAnswer implements Serializable{
 	 */
 	private Integer q3;
 	
-	//----RELATIONS----
+	//----RELATIONSHIPS----
 	
 	/**
 	 * Relationship with table "questionnaire_response"

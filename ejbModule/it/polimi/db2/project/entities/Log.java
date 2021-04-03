@@ -34,7 +34,7 @@ public class Log implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	private java.util.Date datetime;
 	
-	//----RELATIONS----
+	//----RELATIONSHIPS----
 	
 	/**
 	 * Relation with table user: many logs are associated to one user. Since this table has the FK (foreign key), this table is the 
@@ -60,6 +60,15 @@ public class Log implements Serializable{
 	public Log(Date dateTime, User user) {
 		this.datetime = dateTime;
 		this.user = user;
+	}
+	
+	/**
+	 * Constructor
+	 * Take only the date
+	 * @param dateTime
+	 */
+	public Log(Date dateTime) {
+		this.datetime=dateTime;
 	}
 	
 	//----GETTERS AND SETTERS----

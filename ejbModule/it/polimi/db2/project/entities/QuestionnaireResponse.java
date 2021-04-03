@@ -49,7 +49,7 @@ public class QuestionnaireResponse implements Serializable{
 	@Column(nullable = false)
 	private boolean submitted;
 	
-	//----RELATIONS----
+	//----RELATIONSHIPS----
 	
 	/**
 	 * Relationship with table "user"
@@ -167,9 +167,9 @@ public class QuestionnaireResponse implements Serializable{
 	 * @param statisticalAnswers
 	 */
 	public void setStatisticalAnswers(StatisticalAnswer statisticalAnswers) {
-		this.statisticalAnswers = statisticalAnswers;
 		if(statisticalAnswers != null)
 			statisticalAnswers.setQuestionnaireResponse(this); // update the other part of the relation
+		this.statisticalAnswers = statisticalAnswers;
 	}
 
 	/**
@@ -188,11 +188,11 @@ public class QuestionnaireResponse implements Serializable{
 	 * @param marketingAnswers
 	 */
 	public void setMarketingAnswers(List<MarketingAnswer> marketingAnswers) {
-		this.marketingAnswers = marketingAnswers;
-		if(marketingAnswers != null) {
+		if((marketingAnswers != null) && (!marketingAnswers.isEmpty())) {
 			for(int i = 0; i<marketingAnswers.size(); i++)
-				marketingAnswers.get(i).setQuestionnaireResponse(this);
+				marketingAnswers.get(i).setQuestionnaireResponse(this); // updating the counterpart
 		}
+		this.marketingAnswers = marketingAnswers;
 	}
 	
 	/**
@@ -218,11 +218,8 @@ public class QuestionnaireResponse implements Serializable{
 	 * @param marketingAnswer
 	 */
 	public void addMarketingAnswers(MarketingAnswer marketingAnswer) {
+		marketingAnswer.setQuestionnaireResponse(this);
 		getMarketingAnswers().add(marketingAnswer);
-		if(marketingAnswer != null) {
-			for(int i = 0; i<marketingAnswers.size(); i++)
-				marketingAnswers.get(i).setQuestionnaireResponse(this);
-		}
 	}
 	
 	/**

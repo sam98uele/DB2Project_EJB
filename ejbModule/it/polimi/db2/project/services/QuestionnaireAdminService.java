@@ -34,7 +34,7 @@ public class QuestionnaireAdminService {
 	private EntityManager em;
 	
 	/**
-	 * This is used to erase all the questionnaire data related to a specific product
+	 * This is used to erase all the questionnaire data (and the product) related to a specific product
 	 * note that all the responses are erased and the points of the users are removed by triggers
 	 * @param productId the Id of the product to erase all it's questionnaire data. 
 	 * @throws InvalidActionException if the id of the product passed to this method is an ID relative to a product which is 

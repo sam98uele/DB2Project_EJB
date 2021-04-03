@@ -88,13 +88,8 @@ public class UserService {
 			 * saving in the logs the that the user logged in
 			 */
 			Date date = Calendar.getInstance().getTime();
-			Log log = new Log(date, user);
-			try {
-				em.persist(log);
-			}
-			catch(IllegalArgumentException | PersistenceException e) {
-				throw new ApplicationErrorException("Could not login because of an Application Error");
-			}
+			Log log = new Log(date);
+			user.addLog(log);
 			
 			
 			// returning the user to the frontend

@@ -286,7 +286,7 @@ public class QuestionnaireResponseService {
 					.getResultList();
 		}
 		catch(IllegalArgumentException e) {
-			throw new ApplicationErrorException("We are unable to serve your reqyest because of an application problem");
+			throw new ApplicationErrorException("We are unable to serve your request because of an application problem");
 		}
 		
 		if(responses != null && !responses.isEmpty() && responses.size() != 0)

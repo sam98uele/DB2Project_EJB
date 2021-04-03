@@ -60,7 +60,7 @@ public class Product implements Serializable{
 	@Column(columnDefinition = "varchar(200)")
 	private String description;
 	
-	//----RELATIONS----
+	//----RELATIONSHIPS----
 
 	/**
 	 * Relationship with table "questionnaire_response"
@@ -211,6 +211,11 @@ public class Product implements Serializable{
 	 * @param questionnaireResponses
 	 */
 	public void setQuestionnaireResponses(List<QuestionnaireResponse> questionnaireResponses) {
+		if((questionnaireResponses != null) && (!questionnaireResponses.isEmpty())) { //if the list I'm setting is not an empty one
+			for(QuestionnaireResponse i: questionnaireResponses) {
+				i.setProduct(this); //updating the counterpart
+			}
+		}
 		this.questionnaireResponses = questionnaireResponses;
 	}
 
@@ -227,6 +232,11 @@ public class Product implements Serializable{
 	 * @param marketingQuestions
 	 */
 	public void setMarketingQuestions(List<MarketingQuestion> marketingQuestions) {
+		if((marketingQuestions != null) && (!marketingQuestions.isEmpty())) { //if I'm not setting an empty list
+			for(MarketingQuestion i: marketingQuestions) {
+				i.setProduct(this);
+			}
+		}
 		this.marketingQuestions = marketingQuestions;
 	}
 	
@@ -236,8 +246,8 @@ public class Product implements Serializable{
 	 * Method used to add a questionnaire response to this product
 	 */
 	public void addQuestionnaireResponse(QuestionnaireResponse questionnaireResponse) {
+		questionnaireResponse.setProduct(this); //updating the counterpart
 		getQuestionnaireResponses().add(questionnaireResponse);
-		questionnaireResponse.setProduct(this);
 	}
 	
 	/**
@@ -251,11 +261,10 @@ public class Product implements Serializable{
 	 * Method used to add a marketing question
 	 */
 	public void addMarketingQuestion(MarketingQuestion marketingQuestion) {
-		// adding the marketing question
-		getMarketingQuestions().add(marketingQuestion);
-		
 		// setting the product equal to this one to the marketing question
 		marketingQuestion.setProduct(this);
+		// adding the marketing question
+		getMarketingQuestions().add(marketingQuestion);
 	}
 	
 	/**
