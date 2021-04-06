@@ -156,7 +156,7 @@ public class ProductAdminService {
 		//	(we have decided to have this requirement, given that nothing is specified,
 		//		that a product must have at least one marketing answer)
 		if(this.product.getMarketingQuestions() == null || this.product.getMarketingQuestions().isEmpty() || this.product.getMarketingQuestions().size() == 0)
-			throw new ProductException("You must insert at leas one Marketing Answer");
+			throw new ProductException("You must insert at leas one Marketing Question");
 		
 		// persisting the product with all the marketing questions cascading!
 		try {			
