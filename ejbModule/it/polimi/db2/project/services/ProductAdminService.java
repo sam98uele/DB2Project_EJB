@@ -66,17 +66,11 @@ public class ProductAdminService {
 		if(dateCompRes < 0)
 			throw new InvalidInputArgumentException("The inserted date is before the current date! You can insert only product in a date equalt to today or a future date!");
 		
-		//The following imports causes problems. Moreover we faced problems with the insertion date: we had a difference of one day 
-		//between the date selected and the one actually inserted: this was caused by an older version of the connector (it was too old).
-		//after changing that, everything went ok
-		//java.sql.Date dateSQL = new java.sql.Date(date.getTime());
-		//System.out.print(date.toString());
-		
 		// getting the product of the day of the day specified for that product
 		List<Product> prodDay = null;
 		try {
 			prodDay = em.createNamedQuery("Product.getProductOfTheDay", Product.class)
-					.setParameter("date", date) // , TemporalType.DATE was tried to solve the problems said above, but did not work
+					.setParameter("date", date)
 					.getResultList();
 		}
 		catch(IllegalArgumentException e) {
