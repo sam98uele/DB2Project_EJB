@@ -7,7 +7,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.apache.commons.lang3.time.DateUtils;
-import org.apache.openjpa.persistence.PersistenceException;
 import org.joda.time.DateTimeComparator;
 import it.polimi.db2.project.entities.Product;
 import it.polimi.db2.project.entities.QuestionnaireResponse;
@@ -43,14 +42,10 @@ public class QuestionnaireAdminService {
 	 */
 	public Product deleteQuestionnaires(Integer productId) throws InvalidActionException, ProductException{
 		
-		/**
-		 * Initializing the date before retrieving it with a query;
-		 */
+		//Initializing the date before retrieving it with a query;
 		Date dateOfTheProduct = null;
 		
-		/**
-		 * Retrieving the product via entity manager
-		 */
+		//Retrieving the product via entity manager
 		Product p = null;
 		
 		try {
@@ -68,14 +63,10 @@ public class QuestionnaireAdminService {
 			throw new ProductException("Product with id = "+productId+" does not existing!");
 		}
 		
-		/**
-		 * If we are here, then the retrieving of a product has been correctly done, we can assign the date
-		 */
+		//If we are here, then the retrieving of a product has been correctly done, we can assign the date
 		dateOfTheProduct = p.getDate();
 		
-		/**
-		 * Retrieving the date of today
-		 */
+		//Retrieving the date of today
 		Date todayDate = Calendar.getInstance().getTime();
 		
 		/**
@@ -91,12 +82,9 @@ public class QuestionnaireAdminService {
 		if( (dateComparisonResult < 0) && (!DateUtils.isSameDay(dateOfTheProduct, todayDate)) ) {
 			
 			/**
-			 * If we are here, we can perform the deletion, we just need to set as null the list of questionnaire responses, and 
-			 * settings of the relationship will do the rest, and will delete all the children (triggers will perform subtraction 
-			 * of points). This will be scheduled for update in the database
-			 */
-			// 
-			//p.setQuestionnaireResponses(null);
+			 * If we are here, we can perform the deletion of all the data related to the product, we just need to remove it with
+			 * the entity manager. Triggers will subtract points.
+			*/
 			em.remove(p);
 		}else {
 			
@@ -124,9 +112,7 @@ public class QuestionnaireAdminService {
 	 */
 	public List<User> getListUserCompiledQuestionnaire(Integer productID, boolean subOrCanc) throws ApplicationErrorException{
 		
-		/**
-		 * Initializing a temporary list of users.
-		 */
+		//Initializing a temporary list of users.
 		List<User> users = null;
 		
 		/**
@@ -147,14 +133,11 @@ public class QuestionnaireAdminService {
 					.getResultList();
 			
 		}catch(IllegalArgumentException e) {
-			// e.printStackTrace();
 			throw new ApplicationErrorException("Unable to return the users who compiled the questionnaire of the product with id = "+
 					productID +" and parameter submitted = "+ String.valueOf(subOrCanc) );
 		}
 		
-		/**
-		 * Returning the list of users
-		 */
+		//Returning the list of users
 		return users;
 	}
 	
@@ -172,19 +155,13 @@ public class QuestionnaireAdminService {
 	 */
 	public QuestionnaireResponse getAllQuestionnaireAnsweredBySpecificUserAndProduct(Integer userID, Integer productID) throws ApplicationErrorException {
 		
-		/**
-		 * Initializing a temporary list. This list will be filled by the query
-		 */
+		//Initializing a temporary list. This list will be filled by the query
 		List<QuestionnaireResponse> responses = null;
 		
-		/**
-		 * Initializing an object Questionnaire response, this will be the returned one
-		 */
+		//Initializing an object Questionnaire response, this will be the returned one
 		QuestionnaireResponse response = null;
 		
-		/**
-		 * We need to query the database retrieving all the questionnaireResponses responded by a specific user.
-		 */
+		//We need to query the database retrieving all the questionnaireResponses responded by a specific user.
 		try {
 			
 			/**
@@ -199,16 +176,13 @@ public class QuestionnaireAdminService {
 					.getResultList();
 			
 		}catch(IllegalArgumentException e) {
-			// e.printStackTrace();
 			throw new ApplicationErrorException("Unable to return questionnaire responded by user with id = "+userID+" and about the "
 					+ "product with id ="+productID);
 			
 		}
 		
 		if(responses.size() > 1) {
-			/**
-			 * If I am here, I got more than one element. This should not have happened
-			 */
+			//If I am here, I got more than one element. This should not have happened
 			throw new ApplicationErrorException("There is more than one element satisfying the query with parameters userID = "
 					+userID+" and productID = "+productID+".\n This should not happen: a person should be able to answer only\n"+
 					"a questionnaire relative to a product (either none)");
@@ -219,15 +193,11 @@ public class QuestionnaireAdminService {
 		 * element of the list. This check is performed in order to ensure that the inserting part went well
 		 */
 		if(responses == null || responses.isEmpty() || responses.size()==0) {
-			/**
-			 * If I am here, the list is empty, so I directly return the "response element" as initialized, which is null
-			 */
+			//If I am here, the list is empty, so I directly return the "response element" as initialized, which is null
 			return response;
 		}
 		
-		/**
-		 * If I am here, I got only one element, i return that one
-		 */
+		//If I am here, I got only one element, i return that one
 		response = responses.get(0);
 		return response;
 	}

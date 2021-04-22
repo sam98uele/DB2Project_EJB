@@ -28,7 +28,7 @@ public class MarketingAnswer implements Serializable{
 	private int id;
 	
 	/**
-	 * Specifical text anser
+	 * Specific answer text
 	 */
 	@Column(columnDefinition = "varchar(200)", nullable = false)
 	private String answer;

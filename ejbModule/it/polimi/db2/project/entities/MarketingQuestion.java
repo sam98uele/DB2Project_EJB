@@ -55,7 +55,7 @@ public class MarketingQuestion implements Serializable{
 	private List<MarketingAnswer> marketingAnswers;
 	
 	/**
-	 * Relationship with table "product": many questions belong to one single product: this is a MAny to one relationship. Since 
+	 * Relationship with table "product": many questions belong to one single product: this is a Many to One relationship. Since 
 	 * the table represented by this entity contains the FK (foreign key), this entity IS THE OWNER of the relationship.
 	 */
 	@ManyToOne

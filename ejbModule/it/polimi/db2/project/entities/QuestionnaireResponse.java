@@ -40,8 +40,6 @@ public class QuestionnaireResponse implements Serializable{
 	private int id;
 	
 	/**
-	 * eventually we will need a tag Type(type = "org.hibernate.type.NumericBooleanType") in order to map a boolean to a TINYINT, 
-	 * because without the tag the boolean could be mapped to a bit value, and not to a TINYINT
 	 * Flag needed to remember if the questionnaire has been submitted or canceled.
 	 * "0" means that the questionnaire has been canceled;
 	 * "1" means that the questionnaire has been submitted
@@ -53,7 +51,7 @@ public class QuestionnaireResponse implements Serializable{
 	
 	/**
 	 * Relationship with table "user"
-	 * One User can respond to many questionnaires, hence is a Many to one relationship. Since the foreign key is in the table 
+	 * One User can respond to many questionnaires, hence is a Many to One relationship. Since the foreign key is in the table 
 	 * represented by this entity, this entity is the OWNER of the relationship.
 	 */
 	@ManyToOne
@@ -63,7 +61,7 @@ public class QuestionnaireResponse implements Serializable{
 	/**
 	 * Relationship with table "statistical_answer"
 	 * A questionnaire contains many (in this case 3) statistical answers, which are represented in only one entity. 
-	 * This is a One to one relationship. Since the FK is contained in the entity representing the statistical_answer table, 
+	 * This is a One to One relationship. Since the FK is contained in the entity representing the statistical_answer table, 
 	 * this is NOT THE OWNER of the relationship. Since we may not be interested immediately to the actual answers, the fetch type 
 	 * is lazy. If we remove the questionnaire, answers need to be removed.
 	 */
@@ -72,7 +70,7 @@ public class QuestionnaireResponse implements Serializable{
 	
 	/**
 	 * Relationship with table "marketing_answer"
-	 * A questionnaire contains many marketing answers. This is a One to many relationship. Since the FK is contained in the 
+	 * A questionnaire contains many marketing answers. This is a One to Many relationship. Since the FK is contained in the 
 	 * entity representing the marketing_answer table, this is NOT THE OWNER of the relationship. Since generally we need the 
 	 * marketing answer, it is convenient to put the fetch type as EAGER. If we remove the questionnaire, answers need to be removed.
 	 */
@@ -81,7 +79,7 @@ public class QuestionnaireResponse implements Serializable{
 	
 	/**
 	 * Relationship with table "product"
-	 * A product has many questionnaire responses (one per every user who responded). This is a Many to one relationship. Since the 
+	 * A product has many questionnaire responses (one per every user who responded). This is a Many to One relationship. Since the 
 	 * foreign key is in the table represented by this entity, this entity is the OWNER of the relationship.
 	 */
 	@ManyToOne

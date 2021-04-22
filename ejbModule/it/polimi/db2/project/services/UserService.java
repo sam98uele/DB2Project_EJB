@@ -129,11 +129,15 @@ public class UserService {
 			throw new RegistrationException("Cannot fullfil the request");
 		}
 		
+		//if we find someone with the same username, we throw a registration exception
 		if(users_same_username != null && !users_same_username.isEmpty() && users_same_username.size() != 0)
 			throw new RegistrationException("The Username is not available");
 		
+		//if no one was found with the same username, then we perform the registration
 		String user_password;
 		String user_salt;
+		
+		//try to encode the password
 		try {
 			byte[] salt = PasswordEncryption.generateSalt();
 			byte[] encoded_passoword = PasswordEncryption.getEncryptedPassword(password, salt);

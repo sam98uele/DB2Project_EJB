@@ -68,15 +68,13 @@ public class User implements Serializable{
 	private String password;
 	
 	/**
-	 *
+	 * Needed for password encryption
 	 */
 	@Column(columnDefinition = "varchar(45)", nullable = false)
 	@Basic(fetch = FetchType.LAZY)
 	private String salt;
 	
 	/**
-	 * eventually we will need a tag Type(type = "org.hibernate.type.NumericBooleanType") in order to map a boolean to a TINYINT, 
-	 * because without the tag the boolean could be mapped to a bit value, and not to a TINYINT
 	 * Flag needed to remember if the user is an admin. In case, we have different privileges.
 	 * "0" means is not admin;
 	 * "1" means is admin
@@ -85,8 +83,6 @@ public class User implements Serializable{
 	private boolean isAdmin;
 	
 	/**
-	 * eventually we will need a tag Type(type = "org.hibernate.type.NumericBooleanType") in order to map a boolean to a TINYINT, 
-	 * because without the tag the boolean could be mapped to a bit value, and not to a TINYINT
 	 * flag needed to record if the user is blocked or not.
 	 * "0" means is not blocked;
 	 * "1" means is blocked
@@ -277,6 +273,7 @@ public class User implements Serializable{
 	
 	/**
 	 * Setter method for the logs of the user
+	 * It also updates the counterpart of the relationship
 	 * @param logs
 	 */
 	public void setLogs(List<Log> logs) {

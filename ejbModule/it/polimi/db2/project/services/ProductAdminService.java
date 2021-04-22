@@ -43,7 +43,7 @@ public class ProductAdminService {
 	/**
 	 * This is used by the admins to add a new product.
 	 * A check on the user role is performed, if the user is not admin, an exception is thrown.
-	 * The product is created if the date specified does not have product of the day jet.
+	 * The product is created if the date specified does not have product of the day yet.
 	 * 
 	 * 
 	 * @param name the name of the product
@@ -66,16 +66,17 @@ public class ProductAdminService {
 		if(dateCompRes < 0)
 			throw new InvalidInputArgumentException("The inserted date is before the current date! You can insert only product in a date equalt to today or a future date!");
 		
-		// TODO TO RELEASE: mark in comments or presentation the time problems we have faces, plus remove unused imports
-//		java.sql.Date dateSQL = new java.sql.Date(date.getTime());
-		
-//		System.out.print(date.toString());
+		//The following imports causes problems. Moreover we faced problems with the insertion date: we had a difference of one day 
+		//between the date selected and the one actually inserted: this was caused by an older version of the connector (it was too old).
+		//after changing that, everything went ok
+		//java.sql.Date dateSQL = new java.sql.Date(date.getTime());
+		//System.out.print(date.toString());
 		
 		// getting the product of the day of the day specified for that product
 		List<Product> prodDay = null;
 		try {
 			prodDay = em.createNamedQuery("Product.getProductOfTheDay", Product.class)
-					.setParameter("date", date) // , TemporalType.DATE
+					.setParameter("date", date) // , TemporalType.DATE was tried to solve the problems said above, but did not work
 					.getResultList();
 		}
 		catch(IllegalArgumentException e) {
@@ -87,8 +88,6 @@ public class ProductAdminService {
 		// if there are products of the day available, then it's not possible to add a new one for that day!
 		if(prodDay == null || prodDay.size() != 0)
 			throw new ProductException("In the specified day there already exists a product! Cannot insert an other one!");
-		
-		//Date dateAA = Calendar.getInstance().getTime();
 		
 		// creating the new product
 		Product product = new Product(name, date, img, description);
@@ -154,7 +153,7 @@ public class ProductAdminService {
 		// checking if there is at least one marketing answer
 		//	if not we throw an exception!
 		//	(we have decided to have this requirement, given that nothing is specified,
-		//		that a product must have at least one marketing answer)
+		//  that a product must have at least one marketing answer)
 		if(this.product.getMarketingQuestions() == null || this.product.getMarketingQuestions().isEmpty() || this.product.getMarketingQuestions().size() == 0)
 			throw new ProductException("You must insert at leas one Marketing Question");
 		

@@ -8,8 +8,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.persistence.PersistenceException;
-import javax.persistence.TransactionRequiredException;
-
 import it.polimi.db2.project.entities.MarketingAnswer;
 import it.polimi.db2.project.entities.MarketingQuestion;
 import it.polimi.db2.project.entities.Offensive;
@@ -104,8 +102,8 @@ public class QuestionnaireResponseService {
 			 * splitting in " " the answer
 			 */
 			String[] words = marketingAnswer.getAnswer()
-					.replaceAll("[^a-zA-Z]+"," ") // replace not words sequences with space
-					.toLowerCase()
+					.replaceAll("[^a-zA-Z]+"," ") // regex to replace not words sequences with space
+					.toLowerCase() //need to put in lower cases in order to perform check with the offensive words in the db
 					.split(" ");
 			
 			// for all the words in the answer
@@ -304,7 +302,7 @@ public class QuestionnaireResponseService {
 	}
 	
 	/**
-	 * To return the section the user is
+	 * @return the section in which the user is
 	 */
 	public Integer getSection() {
 		return this.section;
