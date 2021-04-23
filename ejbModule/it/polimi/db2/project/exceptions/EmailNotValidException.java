@@ -1,9 +1,9 @@
 package it.polimi.db2.project.exceptions;
 
-public class emailNotValidException extends Exception{
+public class EmailNotValidException extends Exception{
 	private static final long serialVersionUID = 1L;
 
-	public emailNotValidException(String message) {
+	public EmailNotValidException(String message) {
 		super(message);
 	}
 }
