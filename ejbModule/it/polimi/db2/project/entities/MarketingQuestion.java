@@ -1,8 +1,6 @@
 package it.polimi.db2.project.entities;
 
 import java.io.Serializable;
-import java.util.List;
-
 import javax.persistence.*;
 
 /**
@@ -44,15 +42,6 @@ public class MarketingQuestion implements Serializable{
 	private String question;
 	
 	//----RELATIONSHIPS----
-	
-	/**
-	 * Relationship with table "marketing_answer": to one questions, belongs many answers, one per user who responded. This is a 
-	 * One to Many relationship. Since the table represented by this entity does not contain the FK (foreign key), this entity 
-	 * is NOT THE OWNER of the relationship. Since we may not be immediately interested in the answer, we can use a Fetch type 
-	 * lazy, and if we remove question, we want also to remove all the correlated answers.
-	 */
-	@OneToMany(mappedBy = "question", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
-	private List<MarketingAnswer> marketingAnswers;
 	
 	/**
 	 * Relationship with table "product": many questions belong to one single product: this is a Many to One relationship. Since 
@@ -125,27 +114,6 @@ public class MarketingQuestion implements Serializable{
 	}
 
 	/**
-	 * Getter method for the list of answers to this question (answered by users)
-	 * @return
-	 */
-	public List<MarketingAnswer> getMarketingAnswers() {
-		return marketingAnswers;
-	}
-
-	/**
-	 * Setter method for the list of answers to this question (answered by users)
-	 * @param answers
-	 */
-	public void setMarketingAnswers(List<MarketingAnswer> marketingAnswers) {
-		if((marketingAnswers != null) && (!marketingAnswers.isEmpty())) { //if I'm not setting an empty list
-			for (MarketingAnswer i : marketingAnswers) {
-				i.setQuestion(this); //updating the counterpart of the relationships
-			}
-		}
-		this.marketingAnswers = marketingAnswers;
-	}
-
-	/**
 	 * Getter method for the product of which this question is about
 	 * @return
 	 */
@@ -162,20 +130,5 @@ public class MarketingQuestion implements Serializable{
 	}
 	
 	//----ADDERS - REMOVERS----
-	
-	/**
-	 * Method used to add a marketing answer to the list of marketing answers
-	 */
-	public void addMarketingAnswer(MarketingAnswer marketingAnswer) {
-		marketingAnswer.setQuestion(this); //updating the counterpart of the relationship
-		getMarketingAnswers().add(marketingAnswer);
-	}
-	
-	/**
-	 * Method used to remove a marketing answer to the list of marketing answers
-	 */
-	public void removeMarketingAnswer(MarketingAnswer marketingAnswer) {
-		getMarketingAnswers().remove(marketingAnswer);
-	}
 	
 }
