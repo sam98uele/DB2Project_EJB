@@ -52,17 +52,6 @@ public class Log implements Serializable{
 	}
 	
 	/**
-	 * Constructor 
-	 * 
-	 * @param dateTime the timestamp of the log
-	 * @param user the user who logged in
-	 */
-	public Log(Date dateTime, User user) {
-		this.datetime = dateTime;
-		this.user = user;
-	}
-	
-	/**
 	 * Constructor
 	 * Take only the date
 	 * @param dateTime
@@ -115,9 +104,11 @@ public class Log implements Serializable{
 
 	/**
 	 * Setter method for the user responsible of the log
+	 * Protected because it must be called only by the entity User to update the 
+	 * 	counterpart of the relation
 	 * @param userid
 	 */
-	public void setUser(User user) {
+	protected void setUser(User user) {
 		this.user = user;
 	}
 	

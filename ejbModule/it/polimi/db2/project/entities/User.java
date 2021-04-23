@@ -101,15 +101,6 @@ public class User implements Serializable{
 	private List<Log> logs;
 	
 	
-	/**
-	 * Relation with table "questionnaire response"
-	 * One user responds to many questionnaires. The relation is one to many. Since the questionnaire_response table has the 
-	 * FK (foreign key), this entity is NOT the owner of this relationship. Since a user can respond to many questionnaires, it 
-	 * is useful to have the FetchType as Lazy, in order to not affect performances.
-	 */
-	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
-	private List<QuestionnaireResponse> questionnaireResponses;
-	
 	//--- CONSTRUCTORS ----
 	/**
 	 * Default Constructor
@@ -298,46 +289,6 @@ public class User implements Serializable{
 	 */
 	public void setPoints(int points) {
 		this.points = points;
-	}
-	
-	/**
-	 * Getter method for the list of questionnaire to which the user responded
-	 * @return
-	 */
-	public List<QuestionnaireResponse> getQuestionnaireResponses() {
-		return questionnaireResponses;
-	}
-	
-	/**
-	 * Setter method for the list of questionnaire responses.
-	 * @param questionnaireResponses
-	 */
-	public void setQuestionnaireResponses(List<QuestionnaireResponse> questionnaireResponses) {
-		if((questionnaireResponses != null) && (!questionnaireResponses.isEmpty()) ) {  //if the list I'm setting is not null
-			for(QuestionnaireResponse i: questionnaireResponses) {
-				i.setUser(this); //updating the counterpart
-			}
-		}
-		this.questionnaireResponses = questionnaireResponses;
-	}
-	
-	//----ADDERS - REMOVERS----
-	
-	/**
-	 * Method used to add a questionnaire response to a user
-	 * @param response
-	 */
-	public void addQuestionnaireResponse(QuestionnaireResponse response) {
-		response.setUser(this); //updating the counterpart
-		getQuestionnaireResponses().add(response);
-	}
-	
-	/**
-	 * Method used to remove a questionnaire response from a user
-	 * @param response
-	 */
-	public void removeQuestionnaireResponse(QuestionnaireResponse response){
-		getQuestionnaireResponses().remove(response);
 	}
 	
 	/**

@@ -135,9 +135,11 @@ public class StatisticalAnswer implements Serializable{
 
 	/**
 	 * Setter method to set the questionnaire response these statistical answers are about
+	 * Protected because it must be called only by the entity QuestionnaireResponse to update the 
+	 * 	counterpart of the relation
 	 * @param questionnaireResponse
 	 */
-	public void setQuestionnaireResponse(QuestionnaireResponse questionnaireResponse) {
+	protected void setQuestionnaireResponse(QuestionnaireResponse questionnaireResponse) {
 		this.questionnaireResponse = questionnaireResponse;
 	}
 }

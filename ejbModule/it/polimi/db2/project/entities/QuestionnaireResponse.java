@@ -53,6 +53,8 @@ public class QuestionnaireResponse implements Serializable{
 	 * Relationship with table "user"
 	 * One User can respond to many questionnaires, hence is a Many to One relationship. Since the foreign key is in the table 
 	 * represented by this entity, this entity is the OWNER of the relationship.
+	 * This does not have a counterpart in MarketingQuestion because it is not needed and it is useless:
+	 * 	the relation is never used in the other way.
 	 */
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
@@ -203,9 +205,11 @@ public class QuestionnaireResponse implements Serializable{
 
 	/**
 	 * Setter method to set the product of which the questionnaire is about
+	 * Protected because it must be called only by the entity Product to update the 
+	 * 	counterpart of the relation
 	 * @param product
 	 */
-	public void setProduct(Product product) {
+	protected void setProduct(Product product) {
 		this.product = product;
 	}
 	

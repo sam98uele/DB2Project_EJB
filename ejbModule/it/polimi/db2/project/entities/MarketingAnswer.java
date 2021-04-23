@@ -49,6 +49,8 @@ public class MarketingAnswer implements Serializable{
 	 * Many marketing answers belongs to one single marketing question (one answer per each user who responded). This relationship 
 	 * is a Many to One relationship. Since the table represented by this entity contains the FK (foreign key), this entity is the 
 	 * owner of the relationship.
+	 * This does not have a counterpart in MarketingQuestion because it is not needed and it is useless:
+	 * 	the relation is never used in the other way.
 	 */
 	@ManyToOne
 	@JoinColumn(name = "question_id", nullable = false)
@@ -98,9 +100,11 @@ public class MarketingAnswer implements Serializable{
 
 	/**
 	 * Setter method to set the questionnaire response to which this specific question answer belongs
+	 * Protected because it must be called only by the entity QuestionnaireResponse to update the 
+	 * 	counterpart of the relation
 	 * @param questionnaireResponse
 	 */
-	public void setQuestionnaireResponse(QuestionnaireResponse questionnaireResponse) {
+	protected void setQuestionnaireResponse(QuestionnaireResponse questionnaireResponse) {
 		this.questionnaireResponse = questionnaireResponse;
 	}
 

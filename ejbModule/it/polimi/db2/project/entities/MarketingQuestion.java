@@ -123,9 +123,11 @@ public class MarketingQuestion implements Serializable{
 
 	/**
 	 * Setter method for the product of which this question is about
+	 * Protected because it must be called only by the entity Product to update the 
+	 * 	counterpart of the relation
 	 * @param product
 	 */
-	public void setProduct(Product product) {
+	protected void setProduct(Product product) {
 		this.product = product;
 	}
 	
