@@ -50,7 +50,7 @@ public class User implements Serializable{
 	private String username;
 	
 	/**
-	 *
+	 * Contains the email of the user
 	 */
 	// , unique = true
 	@Column(columnDefinition = "varchar(45)", nullable = false)
