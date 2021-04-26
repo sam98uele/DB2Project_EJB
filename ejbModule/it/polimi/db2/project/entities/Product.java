@@ -49,9 +49,9 @@ public class Product implements Serializable{
 	/**
 	 * Photo associated to the product
 	 */
-	// @Basic(fetch=FetchType.LAZY)  REMOVED BECAUSE IT IS ALWAYS NEEDED WITH THE IMAGE
 	@Lob
 	@Column(nullable = false)
+	@Basic(fetch=FetchType.LAZY)
 	private byte[] image;
 	
 	/**
