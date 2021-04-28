@@ -95,7 +95,8 @@ public class User implements Serializable{
 	 * Relation with table "log": a user perform many logs. 1 user, many logs. Since entity "Log" has the FK (foreign key), this 
 	 * entity is NOT the owner of the relationship. Fetch type between user and log is set to Lazy, because since a User is supposed 
 	 * to have a large amount of logs, we don't want to create performance problems. orphanRemoval is set to true because when we 
-	 * remove a user, we also want to remove all its logs.
+	 * remove a user, we also want to remove all its logs and CascadeType.ALL because we want the relation being consistent with all
+	 * the changes of user.
 	 */
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Log> logs;
