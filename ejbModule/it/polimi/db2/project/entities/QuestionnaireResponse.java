@@ -228,8 +228,10 @@ public class QuestionnaireResponse implements Serializable{
 	 * Method used to remove marketing answer response to the list of marketing answer responses
 	 * @param marketingAnswer
 	 */
-	public void removeMarketingAnswers(MarketingAnswer marketingAnswer) {
+	public MarketingAnswer removeMarketingAnswers(MarketingAnswer marketingAnswer) {
 		getMarketingAnswers().remove(marketingAnswer);
+		marketingAnswer.setQuestion(null);
+		return marketingAnswer;
 	}
 	
 	/**

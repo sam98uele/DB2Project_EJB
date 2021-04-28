@@ -253,8 +253,10 @@ public class Product implements Serializable{
 	/**
 	 * Method used to remove a questionnaire response to this product
 	 */
-	public void removeQuestionnaireResponse(QuestionnaireResponse questionnaireResponse) {
+	public QuestionnaireResponse removeQuestionnaireResponse(QuestionnaireResponse questionnaireResponse) {
 		getQuestionnaireResponses().remove(questionnaireResponse);
+		questionnaireResponse.setProduct(null);
+		return questionnaireResponse;
 	}
 	
 	/**
@@ -270,7 +272,9 @@ public class Product implements Serializable{
 	/**
 	 * Method used to remove a marketing question
 	 */
-	public void removeMarketinQuestion(MarketingQuestion marketingQuestion) {
+	public MarketingQuestion removeMarketinQuestion(MarketingQuestion marketingQuestion) {
 		getMarketingQuestions().remove(marketingQuestion);
+		marketingQuestion.setProduct(null);
+		return marketingQuestion;
 	}
 }

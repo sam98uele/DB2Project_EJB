@@ -305,8 +305,10 @@ public class User implements Serializable{
 	 * Method used to remove a log from the user
 	 * @param log
 	 */
-	public void removeLog(Log log){
+	public Log removeLog(Log log){
 		getLogs().remove(log);
+		log.setUser(null);
+		return log;
 	}
 	
 }
