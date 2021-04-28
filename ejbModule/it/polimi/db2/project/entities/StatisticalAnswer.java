@@ -30,16 +30,19 @@ public class StatisticalAnswer implements Serializable{
 	/**
 	 * Age
 	 */
+	@Column(columnDefinition = "int", nullable = true)
 	private Integer q1;
 	
 	/**
-	 * 
+	 * Sex
 	 */
+	@Column(columnDefinition = "int", nullable = true)
 	private Integer q2;
 	
 	/**
-	 * Recorded response to question 3
+	 * Expertise Level
 	 */
+	@Column(columnDefinition = "int", nullable = true)
 	private Integer q3;
 	
 	//----RELATIONSHIPS----
@@ -78,7 +81,7 @@ public class StatisticalAnswer implements Serializable{
 	}
 
 	/**
-	 * Getter method to retrieve the answer to the first question of the statistical answer related to a product done by a user
+	 * Getter method to retrieve the answer to the "Age" of the statistical answer related to a product done by a user
 	 * @return
 	 */
 	public Integer getQ1() {
@@ -86,7 +89,7 @@ public class StatisticalAnswer implements Serializable{
 	}
 
 	/**
-	 * Setter method to set the answer to the first question of the statistical answer related to a product done by a user
+	 * Setter method to set the answer to the "Age" of the statistical answer related to a product done by a user
 	 * @param q1
 	 */
 	public void setQ1(Integer q1) {
@@ -94,7 +97,7 @@ public class StatisticalAnswer implements Serializable{
 	}
 
 	/**
-	 * Getter method to retrieve the answer to the second question of the statistical answer related to a product done by a user
+	 * Getter method to retrieve the answer to the "Sex" of the statistical answer related to a product done by a user
 	 * @return
 	 */
 	public Integer getQ2() {
@@ -102,7 +105,7 @@ public class StatisticalAnswer implements Serializable{
 	}
 
 	/**
-	 * Setter method to set the answer to the second question of the statistical answer related to a product done by a user
+	 * Setter method to set the answer to the "Sex" of the statistical answer related to a product done by a user
 	 * @param q2
 	 */
 	public void setQ2(Integer q2) {
@@ -110,7 +113,7 @@ public class StatisticalAnswer implements Serializable{
 	}
 
 	/**
-	 * Getter method to retrieve the answer to the third question of the statistical answer related to a product done by a user
+	 * Getter method to retrieve the answer to the "Expertise Level" of the statistical answer related to a product done by a user
 	 * @return
 	 */
 	public Integer getQ3() {
@@ -118,7 +121,7 @@ public class StatisticalAnswer implements Serializable{
 	}
 
 	/**
-	 * Setter method to set the answer to the third question of the statistical answer related to a product done by a user
+	 * Setter method to set the answer to the "Expertise Level" of the statistical answer related to a product done by a user
 	 * @param q3
 	 */
 	public void setQ3(Integer q3) {

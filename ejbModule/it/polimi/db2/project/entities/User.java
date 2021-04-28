@@ -46,32 +46,26 @@ public class User implements Serializable{
 	 * Username of the user. Annotation needed to specify the varchar property of the DB. Unique = true has effect only during the DDL generation, not at runtime.
 	 * At runtime the unique check is performed in the database. We left it only for completeness
 	 */
-	@Column(columnDefinition = "varchar(45)", nullable = false, unique = true)
+	@Column(columnDefinition = "varchar(100)", nullable = false, unique = true)
 	private String username;
 	
 	/**
 	 * Contains the email of the user
 	 */
 	// , unique = true
-	@Column(columnDefinition = "varchar(45)", nullable = false)
+	@Column(columnDefinition = "varchar(200)", nullable = false)
 	private String email;
 	
 	/**
 	 * Password of the user. Annotation needed to specify the varchar property of the DB
-	 * We do not really need the password available, and also we set it to null before send it 
-	 * to the Web component to not expose the password. 
-	 * (Setting it to null is needed because we are not sure it will be 
-	 * fetched lazily, because it is a hint for the Persistence Provider, it is not mandatory)
 	 */
-	@Column(columnDefinition = "varchar(45)", nullable = false)
-	@Basic(fetch = FetchType.LAZY)
+	@Column(columnDefinition = "varchar(300)", nullable = false)
 	private String password;
 	
 	/**
 	 * Needed for password encryption
 	 */
-	@Column(columnDefinition = "varchar(45)", nullable = false)
-	@Basic(fetch = FetchType.LAZY)
+	@Column(columnDefinition = "varchar(300)", nullable = false)
 	private String salt;
 	
 	/**

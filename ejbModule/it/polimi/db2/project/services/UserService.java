@@ -93,7 +93,7 @@ public class UserService {
 			
 			
 			// returning the user to the frontend
-			//	no matter for the password, given that is the password of the user
+			// without the password
 			return user; // there exists one user associated to the data
 		}
 		

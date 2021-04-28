@@ -38,7 +38,7 @@ public class MarketingQuestion implements Serializable{
 	/**
 	 * String containing the actual question
 	 */
-	@Column(columnDefinition = "varchar(200)", nullable = false)
+	@Column(columnDefinition = "text", nullable = false)
 	private String question;
 	
 	//----RELATIONSHIPS----

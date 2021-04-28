@@ -32,7 +32,7 @@ public class Log implements Serializable{
 	 */
 	@Column(name = "datetime", nullable = false, columnDefinition = "DATETIME")
 	@Temporal(TemporalType.TIMESTAMP)
-	private java.util.Date datetime;
+	private Date datetime;
 	
 	//----RELATIONSHIPS----
 	
@@ -80,9 +80,9 @@ public class Log implements Serializable{
 
 	/**
 	 * Getter method for date and time of the log
-	 * @return java.util.Date datetime of the log
+	 * @return Date datetime of the log
 	 */
-	public java.util.Date getDatetime() {
+	public Date getDatetime() {
 		return datetime;
 	}
 	
@@ -90,7 +90,7 @@ public class Log implements Serializable{
 	 * Setter method for the date and time of the log
 	 * @param datetime of the log
 	 */
-	public void setDatetime(java.util.Date datetime) {
+	public void setDatetime(Date datetime) {
 		this.datetime = datetime;
 	}
 	

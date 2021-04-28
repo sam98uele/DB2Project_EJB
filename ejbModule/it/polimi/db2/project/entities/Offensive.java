@@ -29,7 +29,7 @@ public class Offensive implements Serializable{
 	/**
 	 * offensive word or expression
 	 */
-	@Column(columnDefinition = "varchar(45)", nullable = false)
+	@Column(columnDefinition = "varchar(100)", nullable = false)
 	private String word;
 	
 	//----RELATIONSHIPS----
