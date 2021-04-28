@@ -230,7 +230,7 @@ public class QuestionnaireResponse implements Serializable{
 	 */
 	public MarketingAnswer removeMarketingAnswers(MarketingAnswer marketingAnswer) {
 		getMarketingAnswers().remove(marketingAnswer);
-		marketingAnswer.setQuestion(null);
+		marketingAnswer.setQuestionnaireResponse(null);
 		return marketingAnswer;
 	}
 	
