@@ -177,7 +177,6 @@ public class User implements Serializable{
 	 * Getter method for password
 	 * @return String password of the user
 	 */
-	@JsonIgnore // this will prevent the password to be sent to the Web
 	public String getPassword() {
 		return password;
 	}
@@ -186,7 +185,6 @@ public class User implements Serializable{
 	 * Setter method for the password
 	 * @param password of the user
 	 */
-	@JsonProperty // marking it as setter of the attribute
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -195,7 +193,6 @@ public class User implements Serializable{
 	 * Getter method for salt
 	 * @return String salt of the user
 	 */
-	@JsonIgnore // this will prevent the salt to be sent to the Web
 	public String getSalt() {
 		return salt;
 	}
@@ -204,7 +201,6 @@ public class User implements Serializable{
 	 * Setter method for the salt
 	 * @param salt of the password of the user
 	 */
-	@JsonProperty // marking it as setter of the attribute
 	public void setSalt(String salt) {
 		this.salt = salt;
 	}
