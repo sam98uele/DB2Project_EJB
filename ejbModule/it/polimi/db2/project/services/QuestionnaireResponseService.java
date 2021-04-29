@@ -1,6 +1,7 @@
 package it.polimi.db2.project.services;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Remove;
 import javax.ejb.Stateful;
@@ -8,6 +9,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.persistence.PersistenceException;
+
+import org.eclipse.persistence.indirection.IndirectList;
+
 import it.polimi.db2.project.entities.MarketingAnswer;
 import it.polimi.db2.project.entities.MarketingQuestion;
 import it.polimi.db2.project.entities.Offensive;
@@ -66,27 +70,44 @@ public class QuestionnaireResponseService {
 		this.response = null; // init the response at null
 	}
 	
+	
+	
 	/**
 	 * To go in the statistical section (the section 1 and last one)
 	 * 
 	 * The client has to provide the answered marketing questions associated to the
 	 * relative question!
 	 * 
-	 * @param marketingAnswers the answers of the previous section
+	 * @param marketingAnswers the marketing answers
 	 */
-	public void goToStatisticalSection(List<MarketingAnswer> marketingAnswers) {
+	public void goToStatisticalSection(Map<Integer, String> marketingAnswers) {
+		this.response.setMarketingAnswers(new IndirectList<>());
+		
+		for(Map.Entry<Integer, String> m : marketingAnswers.entrySet()) {
+			MarketingAnswer ans = new MarketingAnswer();
+			ans.setAnswer(m.getValue());
+			ans.setQuestion(product.getMarketingQuestions().get(m.getKey()));
+			this.response.addMarketingAnswer(ans);
+		}
+		
 		this.section = 1;
-		this.response.setMarketingAnswers(marketingAnswers);
 	}
 	
 	/**
 	 * To go to the marketing section (the section 0 and first one)
 	 * 
-	 * @param statisticalAnswer the answers of the previous section to temporarily save
+	 * @param q1 the first statistical question: the age
+	 * @param q2 the second statistical question: the sex
+	 * @param q3 the third statistical question: the expertise level
 	 */
-	public void goToMarketingSection(StatisticalAnswer statisticalAnswer) {
+	public void goToMarketingSection(Integer q1, Integer q2, Integer q3) {
+		StatisticalAnswer ans = new StatisticalAnswer();
+		ans.setQ1(q1);
+		ans.setQ2(q2);
+		ans.setQ3(q3);
+		
 		this.section = 0;
-		this.response.setStatisticalAnswers(statisticalAnswer);
+		this.response.setStatisticalAnswers(ans);
 	}
 	
 	/**
@@ -140,14 +161,22 @@ public class QuestionnaireResponseService {
 	 * 		the submit button is in the "statistical" section, so, 
 	 * 		we need to save the statistical answer before submitting!
 	 * 
-	 * @param statisticalAnswer the answer in the page!
+	 * @param q1 the first statistical question: the age
+	 * @param q2 the second statistical question: the sex
+	 * @param q3 the third statistical question: the expertise level
 	 * @throws ResponseException if the response is not ready to be submitted
 	 * @throws InvalidAnswerException if there are some invalid answers
 	 * @throws ApplicationErrorException if there are problems with the query
 	 */
-	public void submit(StatisticalAnswer statisticalAnswer) throws ResponseException, InvalidAnswerException, ApplicationErrorException{
+	public void submit(Integer q1, Integer q2, Integer q3) throws ResponseException, InvalidAnswerException, ApplicationErrorException{
+		// creating statistical answer
+		StatisticalAnswer ans = new StatisticalAnswer();
+		ans.setQ1(q1);
+		ans.setQ2(q2);
+		ans.setQ3(q3);
+		
 		// adding the statistical answers to the response
-		this.response.setStatisticalAnswers(statisticalAnswer);
+		this.response.setStatisticalAnswers(ans);
 		
 		// checking if no marketing answer submitted
 		if(this.response.getMarketingAnswers() == null || this.response.getMarketingAnswers().isEmpty() 

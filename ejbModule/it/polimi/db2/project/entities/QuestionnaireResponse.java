@@ -219,7 +219,7 @@ public class QuestionnaireResponse implements Serializable{
 	 * It will update also the other hand of the relation
 	 * @param marketingAnswer
 	 */
-	public void addMarketingAnswers(MarketingAnswer marketingAnswer) {
+	public void addMarketingAnswer(MarketingAnswer marketingAnswer) {
 		marketingAnswer.setQuestionnaireResponse(this);
 		getMarketingAnswers().add(marketingAnswer);
 	}
@@ -228,7 +228,7 @@ public class QuestionnaireResponse implements Serializable{
 	 * Method used to remove marketing answer response to the list of marketing answer responses
 	 * @param marketingAnswer
 	 */
-	public MarketingAnswer removeMarketingAnswers(MarketingAnswer marketingAnswer) {
+	public MarketingAnswer removeMarketingAnswer(MarketingAnswer marketingAnswer) {
 		getMarketingAnswers().remove(marketingAnswer);
 		marketingAnswer.setQuestionnaireResponse(null);
 		return marketingAnswer;
