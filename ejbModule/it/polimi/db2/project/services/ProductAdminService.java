@@ -42,7 +42,6 @@ public class ProductAdminService {
 	
 	/**
 	 * This is used by the admins to add a new product.
-	 * A check on the user role is performed, if the user is not admin, an exception is thrown.
 	 * The product is created if the date specified does not have product of the day yet.
 	 * 
 	 * 

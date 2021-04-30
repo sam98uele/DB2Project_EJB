@@ -105,12 +105,12 @@ public class QuestionnaireAdminService {
 	 * Hence this method can be used to retrieve either the list of user who submitted the questionnaire relative to a certain 
 	 * product, or to retrieve the list of users who cancelled the questionnaire relative to a certain product.
 	 * @param productID is the integer id of the product from which the questionnaires you are retrieving are about
-	 * @param subOrCanc is a boolean needed in order to know which users return: the ones who cancelled the questionnaire, or the 
+	 * @param submitted is a boolean needed in order to know which users return: the ones who cancelled the questionnaire, or the 
 	 * ones who submitted it
 	 * @return a list of User type MAY BE NULL
 	 * @throws ApplicationErrorException when unable to perform the named query
 	 */
-	public List<User> getListUserCompiledQuestionnaire(Integer productID, boolean subOrCanc) throws ApplicationErrorException{
+	public List<User> getListUserCompiledQuestionnaire(Integer productID, boolean submitted) throws ApplicationErrorException{
 		
 		//Initializing a temporary list of users.
 		List<User> users = null;
@@ -129,12 +129,12 @@ public class QuestionnaireAdminService {
 			users = em.createNamedQuery("QuestionnaireResponse.UsersWhoCompiledQuestionnaires", 
 					User.class)
 					.setParameter("idOfTheProduct", productID)
-					.setParameter("submitted", subOrCanc)
+					.setParameter("submitted", submitted)
 					.getResultList();
 			
 		}catch(IllegalArgumentException e) {
 			throw new ApplicationErrorException("Unable to return the users who compiled the questionnaire of the product with id = "+
-					productID +" and parameter submitted = "+ String.valueOf(subOrCanc) );
+					productID +" and parameter submitted = "+ String.valueOf(submitted) );
 		}
 		
 		//Returning the list of users
