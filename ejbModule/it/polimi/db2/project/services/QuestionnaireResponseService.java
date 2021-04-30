@@ -345,13 +345,6 @@ public class QuestionnaireResponseService {
 	}
 	
 	/**
-	 * @return the statistical responses
-	 */
-	public StatisticalAnswer getResponseStat() {
-		return this.response.getStatisticalAnswers();
-	}
-	
-	/**
 	 * @return the product of the day this answer corresponds
 	 */
 	public Product getProduct() {
