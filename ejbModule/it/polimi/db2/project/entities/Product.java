@@ -14,8 +14,11 @@ import org.eclipse.persistence.indirection.IndirectList;
 @Entity
 @Table(name = "product", schema = "db2_project")
 @NamedQueries({ 
+	// used to get the product of a day
 	@NamedQuery(name = "Product.getProductOfTheDay", query = "SELECT p FROM Product p WHERE p.date = :date"),
+	// used to get the product of the current day
 	@NamedQuery(name = "Product.getProductOfTheDayToday", query = "SELECT p FROM Product p WHERE p.date = CURRENT_DATE"),
+	// used to retrieve the products of the past day w.r.t. the current one
 	@NamedQuery(name = "Product.getPastProductOfTheDay", query = "SELECT p FROM Product p WHERE p.date < CURRENT_DATE ORDER BY p.date DESC")
 })
 public class Product implements Serializable{

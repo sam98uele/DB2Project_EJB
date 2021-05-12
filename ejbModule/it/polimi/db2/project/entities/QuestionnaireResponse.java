@@ -15,11 +15,14 @@ import it.polimi.db2.project.comparator.CompareMarketingAnswer;
 @Entity
 @Table(name = "questionnaire_response", schema="db2_project")
 @NamedQueries({
+	// used to display responses on User Homepage
 	@NamedQuery(name = "QuestionnaireResponse.SubmittedQuestionnaireOfProductExceptSpecifiedUser", 
 				query = "SELECT r FROM QuestionnaireResponse r WHERE r.product.id = :productOfTheDay and r.submitted = :submitted and r.user.id <> :userId"),
+	// used by Admin Product Inspection
 	@NamedQuery(name = "QuestionnaireResponse.UsersWhoCompiledQuestionnaires",
 				query = "SELECT r.user FROM QuestionnaireResponse r WHERE r.product.id = :idOfTheProduct and "
 						+ "r.submitted = :submitted"),
+	// used by Admin Product Inspection
 	@NamedQuery(name = "QuestionnaireResponse.RetrieveSpecificQuestionnaire",
 		query = "SELECT r FROM QuestionnaireResponse r WHERE r.user.id = :userID and r.product.id = :productID")
 })

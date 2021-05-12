@@ -30,7 +30,7 @@ public class MarketingAnswer implements Serializable{
 	/**
 	 * Specific answer text
 	 */
-	@Column(columnDefinition = "varchar(200)", nullable = false)
+	@Column(columnDefinition = "text", nullable = false)
 	private String answer;
 	
 	//----RELATIONSHIPS----

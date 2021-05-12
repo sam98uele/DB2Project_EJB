@@ -12,11 +12,10 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "user", schema="db2_project")
-@NamedQueries(
-		{@NamedQuery(name = "User.checkCredentials", query = "SELECT r FROM User r  WHERE r.username = ?1 and r.password = ?2"),
-			@NamedQuery(name = "User.getUserByUsername", query = "SELECT r FROM User r  WHERE r.username = ?1")
-		}
-)
+@NamedQueries({
+	// used during login phase
+	@NamedQuery(name = "User.getUserByUsername", query = "SELECT r FROM User r  WHERE r.username = ?1")
+})
 public class User implements Serializable{
 	
 	//----ATTRIBUTES----
